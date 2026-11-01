@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Night Classes - Live Streams, Party Rooms & Reels</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- AdManager / Clickadilla Multi-Spot Ad Network (Popunder #1505558, Web Push #1505561, Inpage Push #1505564) -->
+  <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="469997"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./uyTLng.js').catch(function(e) {
+          console.warn('[AdManager SW] Notice:', e);
+        });
+      });
+    }
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #070714; color: #F8FAFC; margin: 0; padding: 0; overflow-x: hidden; }
+    .glow-rose { box-shadow: 0 0 25px rgba(244, 63, 94, 0.4); }
+    .glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4); }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes floatHeart {
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      50% { transform: translateY(-60px) scale(1.2) rotate(15deg); }
+      100% { opacity: 0; transform: translateY(-130px) scale(1.5) rotate(-15deg); }
+    }
+    .heart-float {
+      animation: floatHeart 1.2s ease-out forwards;
+      position: absolute;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-20 select-none bg-[#070714] text-slate-100">
+
+  <!-- Persistent DOM Audio Engines (Active Rendering for Mobile WebViews & iOS Safari) -->
+  <audio id="liveMusicAudioPlayer" playsinline preload="auto" style="position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;"></audio>
+  <audio id="partyMusicAudioPlayer" playsinline preload="auto" style="position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;"></audio>
+
+  <!-- Top App Bar -->
+  <header class="sticky top-0 z-40 bg-[#0B0B18]/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between shadow-xl">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-400 p-[1.5px] shadow-lg shadow-rose-600/30 overflow-hidden">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgezwstFI-tK-EPdYFjcfV8QRWpFdKeyt3ZvV-o2k26isTfOjTyussnZkc1U5bW6rRe-tZaRYMyXRk9mR_GhaTGluvwXknXr-SKhYnPvyyQDyCdqq7en7cL2et9UXyksJqbcsh0PF9s5YB0nrO_GO7PVDDmseg73qB5_2t9tAFzzEC2sV4BskgYfKkhGYM/s1586/file_00000000e7cc81faaf67d47c338949f5.png" class="w-full h-full object-cover rounded-[10px]" alt="Logo">
+      </div>
+      <div>
+        <h1 class="text-base font-extrabold bg-gradient-to-r from-white via-rose-200 to-amber-200 bg-clip-text text-transparent leading-none">Night Classes</h1>
+        <p class="text-[9px] text-slate-400 mt-0.5">Live Streams · 1-on-1 Party · 9:16 Reels · Connect</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div onclick="openUserLoginModal()" id="headerAuthBtn" class="px-2.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-bold cursor-pointer hover:bg-white/20 transition-all flex items-center gap-1">
+        <span>👤</span><span id="headerAuthText">Log In</span>
+      </div>
+      <div onclick="openRechargeModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold cursor-pointer hover:bg-amber-500/30 transition-all flex items-center gap-1.5">
+        <span>🪙</span><span id="headerCoins">300 Coins</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Country Selection Bar (Visible in Live & Party tabs) -->
+  <div id="countryBar" class="max-w-4xl mx-auto w-full px-4 pt-3 pb-1 flex gap-2 overflow-x-auto hide-scrollbar text-xs">
+    <span class="text-slate-400 font-semibold shrink-0 py-1 flex items-center gap-1">🌐 Region:</span>
+    <button onclick="selectCountry('ALL')" id="cntALL" class="px-3 py-1 rounded-xl bg-rose-600 text-white font-semibold shrink-0">All Countries</button>
+    <button onclick="selectCountry('US')" id="cntUS" class="px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0">🇺🇸 United States</button>
+    <button onclick="selectCountry('UK')" id="cntUK" class="px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0">🇬🇧 United Kingdom</button>
+    <button onclick="selectCountry('AE')" id="cntAE" class="px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0">🇦🇪 UAE</button>
+    <button onclick="selectCountry('IN')" id="cntIN" class="px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0">🇮🇳 India</button>
+    <button onclick="selectCountry('BD')" id="cntBD" class="px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0">🇧🇩 Bangladesh</button>
+  </div>
+
+  <!-- Main View Area -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-3 sm:p-4">
+
+    <!-- 1. LIVE ALL ROOMS -->
+    <section id="viewLive" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>Live Streams (20 Active Rooms)</span>
+        </h2>
+        <span class="text-[11px] text-amber-300">Live chat & streaming active</span>
+      </div>
+
+      <!-- User Host Banner -->
+      <div class="p-4 rounded-3xl bg-gradient-to-r from-rose-950/70 via-purple-950/40 to-[#0F0F24] border border-rose-500/30 flex items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="relative w-12 h-12 rounded-full ring-2 ring-amber-400 p-0.5 bg-black shrink-0 overflow-hidden">
+            <img id="userBannerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full" alt="Host Avatar">
+            <span class="absolute -top-1 -right-1 text-xs">👑</span>
+          </div>
+          <div>
+            <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+              <span>Start Your Live Stream</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">VIP</span>
+            </h3>
+            <p class="text-[10px] text-slate-300 mt-0.5">Turn on camera, choose title & go live</p>
+          </div>
+        </div>
+        <button onclick="openGoLive()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 hover:scale-105 active:scale-95 text-white font-bold text-xs shrink-0 shadow-lg shadow-rose-600/30 transition-all">
+          Go Live 🔴
+        </button>
+      </div>
+
+      <!-- 20 Live Room Cards -->
+      
+      <!-- Sponsored Partner Ad (320x50) -->
+      <div class="w-full max-w-lg mx-auto my-3 flex flex-col items-center justify-center p-2 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Sponsored Announcement (320x50)</span>
+        <div class="flex items-center justify-center overflow-hidden">
+          <iframe style="width:320px;height:50px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '036bc991f0bbf5b343703d7d4259daa6','format' : 'iframe','height' : 50,'width' : 320,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/036bc991f0bbf5b343703d7d4259daa6'></script></body></html>"></iframe>
+        </div>
+      </div>
+
+      <div id="liveGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+    </section>
+
+    <!-- 2. PARTY ALL ROOMS -->
+    <section id="viewParty" class="space-y-4 hidden">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>🥂</span>
+          <span>Party Lounges (20 Private 1-on-1 Rooms)</span>
+        </h2>
+        <span class="text-[11px] text-emerald-400 font-semibold">Passcode Lock Active 🔒</span>
+      </div>
+      
+      <!-- Biomanos Featured Sponsor (300x250) -->
+      <div class="w-full max-w-lg mx-auto my-3 flex flex-col items-center justify-center p-2 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Sponsored Party Lounge (300x250)</span>
+        <div class="flex items-center justify-center overflow-hidden">
+          <iframe style="width:300px;height:250px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '94a4b18b373763978c7d2e3ff124de50','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/94a4b18b373763978c7d2e3ff124de50'></script></body></html>"></iframe>
+        </div>
+      </div>
+
+      <div id="partyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+    </section>
+
+    <!-- 3. REELS 9:16 VIEWER -->
+    <section id="viewReels" class="space-y-3 hidden flex flex-col items-center">
+      <div class="w-full flex items-center justify-between px-1">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-black text-white flex items-center gap-1.5">
+            <span>🎬 Trending 9:16 Reels</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">YouTube Shorts</span>
+          </span>
+        </div>
+        <button onclick="openReelUploadModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-bold text-xs flex items-center gap-1 shadow-lg shadow-rose-600/30">
+          <span>+ Upload Reel</span>
+        </button>
+      </div>
+
+      <!-- 9:16 Video Box -->
+      <div class="relative w-full max-w-sm aspect-[9/16] rounded-3xl overflow-hidden bg-black border-2 border-white/10 shadow-2xl flex items-center justify-center">
+        <iframe id="reelIframe" src="https://www.youtube-nocookie.com/embed/kJQP7kiw5Fk?autoplay=1&mute=0&loop=1&playlist=kJQP7kiw5Fk&controls=0&modestbranding=1" class="w-full h-full object-cover"></iframe>
+
+        <!-- Controls Overlay -->
+        <div class="absolute right-3 bottom-16 flex flex-col items-center gap-3 z-20">
+          <button onclick="toggleReelLike()" id="btnReelLike" class="w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all">
+            ❤️
+          </button>
+          <span id="reelLikesCount" class="text-[10px] font-bold text-white drop-shadow">1420</span>
+
+          <button onclick="openReelComment()" class="w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all">
+            💬
+          </button>
+          <span class="text-[10px] font-bold text-white drop-shadow">86</span>
+
+          <button onclick="sendReelGift()" class="w-10 h-10 rounded-full bg-amber-500/30 border border-amber-500/50 flex items-center justify-center text-amber-300 active:scale-90 transition-all">
+            🎁
+          </button>
+          <span class="text-[9px] font-bold text-amber-300 drop-shadow">Gift</span>
+
+          <button onclick="shareReel()" class="w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all">
+            ↗️
+          </button>
+        </div>
+
+        <!-- Reel Host Bottom Info -->
+        <div class="absolute bottom-3 left-3 right-16 z-20 pointer-events-auto">
+          <p id="reelUploader" onclick="openCurrentReelUserProfile()" class="text-xs font-bold text-white flex items-center gap-1 drop-shadow cursor-pointer hover:underline hover:text-rose-400" title="View Profile">Priya Roy <span class="text-[9px] text-blue-400">✓</span></p>
+          <p id="reelTitle" class="text-[11px] text-slate-200 mt-1 line-clamp-2 drop-shadow">Rainy Night Relaxing Lo-Fi Beats 🌧️🎵 #shorts #music</p>
+        </div>
+
+        <!-- Next / Prev Buttons -->
+        <button onclick="prevReel()" class="absolute left-3 top-3 px-2 py-1 rounded-lg bg-black/50 text-white text-[10px] z-20">▲ Prev</button>
+        <button onclick="nextReel()" class="absolute right-3 top-3 px-2 py-1 rounded-lg bg-black/50 text-white text-[10px] z-20">▼ Next</button>
+      </div>
+    </section>
+
+    <!-- 4. FOLLOW BUTTON / USERS LIST -->
+    <section id="viewFollow" class="space-y-3 hidden">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>👥</span>
+          <span>Community Creators & Follow</span>
+        </h2>
+        <span class="text-[11px] text-slate-400">Follow creators & start 1-on-1 chats</span>
+      </div>
+      <div id="followList" class="space-y-2.5"></div>
+
+      <!-- Follow Sponsor Banner (468x60) -->
+      <div class="w-full max-w-lg mx-auto my-3 flex flex-col items-center justify-center p-2 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Sponsored Creator Sponsor (468x60)</span>
+        <div class="flex items-center justify-center overflow-hidden w-full">
+          <iframe style="width:100%;max-width:468px;height:60px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '6757f6ee6f3c1749c0328bd67541953b','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/6757f6ee6f3c1749c0328bd67541953b'></script></body></html>"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. MESSAGES VIEW -->
+    <section id="viewMessages" class="space-y-3 hidden">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>💬</span>
+          <span>Direct Messages</span>
+        </h2>
+        <span class="text-[10px] text-amber-300">Free Messages: <span id="msgFreeCount">61</span>/61</span>
+      </div>
+      <div id="chatMessagesBox" class="rounded-3xl bg-[#0F0F24] border border-white/10 p-4 h-80 overflow-y-auto space-y-3 text-xs">
+        <div class="flex items-start gap-2">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover">
+          <div class="bg-white/10 p-2.5 rounded-2xl rounded-tl-none max-w-[75%]">
+            <p class="font-bold text-rose-300 text-[10px]">Tania Sultana</p>
+            <p class="text-slate-200 mt-0.5">Hey! Welcome to Night Classes! Join my live session whenever you're free 😊</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 px-4 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white text-xs focus:outline-none focus:border-rose-500">
+        <button onclick="sendChatMessage()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs">Send</button>
+      </div>
+
+      <!-- Messages Sponsor Banner (320x50) -->
+      <div class="w-full max-w-lg mx-auto my-2 flex flex-col items-center justify-center p-1.5 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Sponsored Chat Partner (320x50)</span>
+        <div class="flex items-center justify-center overflow-hidden">
+          <iframe style="width:320px;height:50px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '036bc991f0bbf5b343703d7d4259daa6','format' : 'iframe','height' : 50,'width' : 320,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/036bc991f0bbf5b343703d7d4259daa6'></script></body></html>"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. NOTIFICATIONS VIEW -->
+    <section id="viewNotifications" class="space-y-3 hidden">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>🔔</span>
+          <span>Notifications</span>
+        </h2>
+        <span class="text-[10px] text-slate-400">All recent activities</span>
+      </div>
+      <div class="space-y-2">
+        <div class="p-3 rounded-2xl bg-[#0F0F24] border border-amber-500/30 flex items-center gap-3">
+          <span class="text-2xl">👑</span>
+          <div>
+            <h4 class="text-xs font-bold text-white">VIP Gold Frame & Verified Badge Activated!</h4>
+            <p class="text-[10px] text-slate-400">Your complimentary 30-day VIP pass is active. Enjoy exclusive styling!</p>
+          </div>
+        </div>
+        <div class="p-3 rounded-2xl bg-[#0F0F24] border border-rose-500/20 flex items-center gap-3">
+          <span class="text-2xl">🎁</span>
+          <div>
+            <h4 class="text-xs font-bold text-white">Welcome Gift: 300 Free Coins!</h4>
+            <p class="text-[10px] text-slate-400">Use your coins to send gifts and connect with live creators.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerts Sponsor Banner (300x250) -->
+      <div class="w-full max-w-lg mx-auto my-3 flex flex-col items-center justify-center p-2 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Sponsored Special Offer (300x250)</span>
+        <div class="flex items-center justify-center overflow-hidden">
+          <iframe style="width:300px;height:250px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '94a4b18b373763978c7d2e3ff124de50','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/94a4b18b373763978c7d2e3ff124de50'></script></body></html>"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. PROFILE VIEW -->
+    <section id="viewProfile" class="space-y-4 hidden">
+      <div class="p-5 rounded-3xl bg-gradient-to-b from-[#13132B] to-[#0A0A18] border border-amber-500/30 text-center space-y-3.5 shadow-xl">
+        <div class="relative w-24 h-24 mx-auto">
+          <div class="w-full h-full rounded-full ring-4 ring-amber-400 p-1 bg-black">
+            <img id="profileUserAvatarImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full">
+          </div>
+          <span class="absolute -top-2 left-1/2 -translate-x-1/2 text-2xl">👑</span>
+          <span class="absolute bottom-0 right-0 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[9px] font-bold">✓</span>
+        </div>
+        <div>
+          <h3 id="profileUserName" class="text-base font-extrabold text-white flex items-center justify-center gap-1.5">
+            <span>Alex Vance</span>
+            <span class="text-xs text-blue-400">✓</span>
+          </h3>
+          <p class="text-xs text-amber-300 font-semibold">VIP Royal Gold · Verified Host Pass</p>
+        </div>
+
+        <!-- 4 Stats Cards with Dollar Option -->
+        <div class="grid grid-cols-4 gap-2 py-2">
+          <div class="p-2 rounded-xl bg-black/40 border border-white/5">
+            <span class="block text-xs font-bold text-amber-400" id="dashCoins">300</span>
+            <span class="text-[9px] text-slate-400">Coins 🪙</span>
+          </div>
+          <div class="p-2 rounded-xl bg-emerald-950/40 border border-emerald-500/30 shadow-md">
+            <span class="block text-xs font-black text-emerald-400" id="dashDollars">$45.50</span>
+            <span class="text-[9px] text-emerald-300 font-bold">Dollars ($)</span>
+          </div>
+          <div class="p-2 rounded-xl bg-black/40 border border-white/5">
+            <span class="block text-xs font-bold text-rose-400">1,240</span>
+            <span class="text-[9px] text-slate-400">Followers</span>
+          </div>
+          <div class="p-2 rounded-xl bg-black/40 border border-white/5">
+            <span class="block text-xs font-bold text-amber-400">30 Days</span>
+            <span class="text-[9px] text-slate-400">VIP Pass</span>
+          </div>
+        </div>
+
+        <!-- Prominent Dollar Wallet & Cashout Box -->
+        <div class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-[#0B1A12] to-black border border-emerald-500/50 flex items-center justify-between text-left shadow-xl">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <div class="w-full h-full rounded-[14px] bg-black flex items-center justify-center text-emerald-400 text-xl font-black">
+                $
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-wider block">Total Dollar Balance</span>
+              <div class="flex items-center gap-2">
+                <span class="text-base sm:text-lg font-black text-white" id="profileDollarAmount">$45.50 USD</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">Available</span>
+              </div>
+            </div>
+          </div>
+          <button onclick="openWithdrawModal()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold text-xs shadow-lg shadow-emerald-500/30 active:scale-95 transition-all flex items-center gap-1.5 shrink-0">
+            <span>💸</span>
+            <span>Withdraw ($)</span>
+          </button>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2">
+          <button onclick="renewVipFrame()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-bold text-xs shadow-lg active:scale-95 transition-all">
+            Renew VIP Frame (200 Coins) 👑
+          </button>
+          <button onclick="openRechargeModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs active:scale-95 transition-all">
+            + Coins 🪙
+          </button>
+        </div>
+      </div>
+
+      <!-- Profile Partner Ad (320x50) -->
+      <div class="w-full max-w-lg mx-auto my-3 flex flex-col items-center justify-center p-2 rounded-2xl bg-black/40 border border-white/5 text-center">
+        <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold mb-1">VIP Club Partner (320x50)</span>
+        <div class="flex items-center justify-center overflow-hidden">
+          <iframe style="width:320px;height:50px;border:none;overflow:hidden;" scrolling="no" srcdoc="<!DOCTYPE html><html><body style='margin:0;padding:0;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;'><script type='text/javascript'>atOptions = {'key' : '036bc991f0bbf5b343703d7d4259daa6','format' : 'iframe','height' : 50,'width' : 320,'params' : {}};</script><script type='text/javascript' src='https://biomanos.org/22/036bc991f0bbf5b343703d7d4259daa6'></script></body></html>"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL VIEW (Accessed via Small Bottom Lock Button) -->
+    <section id="viewAdmin" class="space-y-4 hidden">
+      <div class="p-4 rounded-3xl bg-[#0D0D1E] border border-amber-500/40 space-y-4">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🛡️</span>
+            <div>
+              <h3 class="text-sm font-bold text-white">Night Classes Master Admin</h3>
+              <p class="text-[10px] text-slate-400">Coin distribution, moderation & app code</p>
+            </div>
+          </div>
+          <button onclick="closeAdminView()" class="px-2.5 py-1 rounded-xl bg-white/10 text-slate-300 text-xs">✕ Close</button>
+        </div>
+
+        <div class="space-y-3">
+          <div class="p-3 rounded-2xl bg-black/40 border border-white/10">
+            <h4 class="text-xs font-bold text-amber-300 mb-2">⚡ Quick Coin Top-up for User</h4>
+            <div class="flex gap-2">
+              <input id="adminCoinInput" type="number" value="500" class="w-24 px-3 py-1.5 rounded-xl bg-black border border-white/20 text-white text-xs text-center font-mono">
+              <button onclick="adminAddCoins()" class="flex-1 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition-all">
+                + Add Coins to Current User
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+            <h4 class="text-xs font-bold text-rose-300">📋 Standalone Single-File index.html Code</h4>
+            <p class="text-[10px] text-slate-400 leading-relaxed">
+              Copy this complete standalone code and paste it into GitHub Pages or AppCreator24. All 20 Live rooms and 20 Party rooms work seamlessly with real photos and zero blocks.
+            </p>
+            <div class="flex gap-2 pt-1">
+              <button onclick="copyThisCode()" id="btnCopySingleCode" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-1.5">
+                <span>📋 Copy 100% Complete Code</span>
+              </button>
+            </div>
+          <!-- Audio Hosting & Custom Link Guide for User/Admin -->
+          <div class="p-3.5 rounded-2xl bg-black/50 border border-purple-500/40 space-y-2.5 text-xs text-slate-200">
+            <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+              <h4 class="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
+                <span>🎵</span><span>Free Audio Hosting & Direct Music Links</span>
+              </h4>
+              <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">100% Free Hosting</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              Google Drive এর মতো অডিও গান রেখে অ্যাপে বাজানোর জন্য সেরা ফ্রী হোস্টিং সাইট:
+            </p>
+            <div class="space-y-1.5 text-[10px] text-slate-300">
+              <div class="p-2 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-white font-bold block">1. Internet Archive (archive.org) — সেরা ও আনলিমিটেড:</span>
+                <span>ফ্রী অ্যাকাউন্ট খুলে গান আপলোড করুন। ফাইলের নামের উপর Right Click করে "Copy Link" নিন। সরাসরি CORS সাপোর্ট করে এবং APK তে বাজে।</span>
+              </div>
+              <div class="p-2 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-white font-bold block">2. Catbox.moe — ইনস্ট্যান্ট লিঙ্ক (অ্যাকাউন্ট ছাড়াই):</span>
+                <span>catbox.moe তে গিয়ে MP3 ফাইল আপলোড করলেই সরাসরি লিঙ্ক পাবেন (e.g. <span class="text-amber-300">https://files.catbox.moe/xxxxxx.mp3</span>)।</span>
+              </div>
+              <div class="p-2 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-white font-bold block">3. GitHub + jsDelivr CDN — সুপারফাস্ট:</span>
+                <span>GitHub রিপোজিটরিতে গান আপলোড করে <span class="text-amber-300">https://cdn.jsdelivr.net/gh/username/repo@main/song.mp3</span> দিয়ে বাজানো যায়।</span>
+              </div>
+              <div class="p-2 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-white font-bold block">4. Phone Audio Selector (📁 Phone বাটন):</span>
+                <span>লাইভ ও পার্টি রুমের ভেতরে "📁 Phone" বাটনে চাপ দিলে ফোন মেমোরি থেকে সরাসরি যেকোনো গান সিলেক্ট করে ইন্টারনেটে না রেখেও বাজানো যায়!</span>
+              </div>
+            </div>
+            <div class="pt-1 border-t border-white/10">
+              <label class="block text-[10px] font-bold text-amber-300 mb-1">কাস্টম অনলাইন অডিও লিঙ্ক যোগ করুন (Custom Direct MP3 URL):</label>
+              <div class="flex gap-2">
+                <input id="adminCustomAudioInput" type="url" placeholder="https://ia800905.us.archive.org/.../song.mp3" class="flex-1 px-3 py-1.5 rounded-xl bg-black border border-white/20 text-white text-xs font-mono">
+                <button onclick="adminSaveCustomAudio()" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md">Add Song 💾</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Footer with @night classes all right and Admin Lock Button (Only visible on Home Live page!) -->
+    <footer id="appFooter" class="w-full py-6 mt-8 border-t border-white/5 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-center gap-2">
+      <span>© Night Classes. All rights reserved.</span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-slate-600">·</span>
+        <span>@night classes all right</span>
+        <button onclick="openAdminLoginModal()" title="Admin Panel" class="w-6 h-6 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-400 hover:text-amber-400 transition-colors ml-1 shadow-sm">
+          <span class="text-xs">🔒</span>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- 7 Bottom Navigation Buttons (No lock button on bottom row) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-[#0B0B18]/95 backdrop-blur-2xl border-t border-white/10 shadow-2xl">
+    <div class="flex items-center justify-center max-w-xl mx-auto px-2 h-16">
+      <div class="grid grid-cols-7 w-full items-center text-center text-xs">
+        <button onclick="nav('live')" id="tabLive" class="flex flex-col items-center justify-center text-rose-500 font-bold">
+          <span class="text-base">📻</span><span class="text-[9px]">Live</span>
+        </button>
+        <button onclick="nav('party')" id="tabParty" class="flex flex-col items-center justify-center text-slate-400">
+          <span class="text-base">🥂</span><span class="text-[9px]">Party</span>
+        </button>
+        <button onclick="nav('reels')" id="tabReels" class="flex flex-col items-center justify-center text-slate-400 relative">
+          <span class="text-base">🎬</span>
+          <span class="text-[9px]">Reels</span>
+          <span class="absolute top-1 right-2 px-1 py-0.2 text-[7px] font-black rounded-full bg-rose-500 text-white">9:16</span>
+        </button>
+        <button onclick="nav('follow')" id="tabFollow" class="flex flex-col items-center justify-center text-slate-400">
+          <span class="text-base">👥</span><span class="text-[9px]">Follow</span>
+        </button>
+        <button onclick="nav('messages')" id="tabMessages" class="flex flex-col items-center justify-center text-slate-400">
+          <span class="text-base">💬</span><span class="text-[9px]">Chats</span>
+        </button>
+        <button onclick="nav('notifications')" id="tabNotifications" class="flex flex-col items-center justify-center text-slate-400">
+          <span class="text-base">🔔</span><span class="text-[9px]">Alerts</span>
+        </button>
+        <button onclick="nav('profile')" id="tabProfile" class="flex flex-col items-center justify-center text-slate-400">
+          <span class="text-base">👤</span><span class="text-[9px]">Profile</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- LIVE ROOM MODAL (Interactive 9:16 Live Stream Screen) -->
+  <div id="modalLiveRoom" class="fixed inset-0 z-[80] bg-black/95 backdrop-blur-xl hidden flex-col" style="z-index: 800 !important;">
+    <div class="relative w-full max-w-md mx-auto flex-1 flex flex-col justify-between overflow-hidden">
+      <!-- Background Video Stream Image & Hardware Camera Video -->
+      <div class="absolute inset-0 z-0 bg-black">
+        <video id="liveUserCameraVideo" autoplay playsinline muted class="hidden absolute inset-0 w-full h-full object-cover transform -scale-x-100 z-0"></video>
+        <img id="liveStreamBg" src="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60 pointer-events-none"></div>
+      </div>
+
+      <!-- Live Stream Top Header -->
+      <div class="relative z-10 px-4 pt-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 bg-black/50 backdrop-blur-md p-1.5 pr-3.5 rounded-full border border-white/15">
+          <img id="liveHostAvatar" src="" onclick="openCurrentLiveHostProfile()" class="w-9 h-9 rounded-full object-cover ring-2 ring-rose-500 cursor-pointer hover:scale-110 transition-transform" title="View Host Profile">
+          <div onclick="openCurrentLiveHostProfile()" class="cursor-pointer" title="View Host Profile">
+            <h4 id="liveHostName" class="text-xs font-bold text-white flex items-center gap-1 hover:text-rose-300">Host <span class="text-[9px] text-blue-400">✓</span></h4>
+            <p id="liveRoomTag" class="text-[9px] text-rose-300">Night Classes Lounge</p>
+          </div>
+          <button onclick="toggleFollowHost()" id="btnFollowHost" class="ml-1 px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold">+ Follow</button>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button id="btnHtmlCam" onclick="toggleHtmlCam()" title="Toggle Camera" class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow">📷</button>
+          <button id="btnHtmlMic" onclick="toggleHtmlMic()" title="Toggle Mic" class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow">🎤</button>
+          <div class="px-2.5 py-1 rounded-full bg-rose-600 text-white text-[10px] font-bold flex items-center gap-1 animate-pulse">
+            <span>● LIVE</span> <span id="liveViewerCount">240</span>
+          </div>
+          <button onclick="closeLiveRoom()" class="w-8 h-8 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center text-sm font-bold">✕</button>
+        </div>
+      </div>
+
+      <!-- Active Robot Audience Row (8 Members with Avatars) -->
+      <div class="relative z-10 px-4 pt-1.5 pb-1 flex flex-col gap-1">
+        <div class="px-2.5 py-1 rounded-2xl bg-black/60 backdrop-blur-md border border-purple-500/30 flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-[10px] text-amber-300 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Active Audience (8 Members)</span>
+          </div>
+          <span class="text-[9px] text-rose-300 font-semibold">VIP Community 👑</span>
+        </div>
+        <div id="robotAudienceRow" class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1">
+          <!-- Dynamically populated with 8 robot photos & badges -->
+        </div>
+      </div>
+
+      <!-- Live Music Player Bar -->
+      <div class="relative z-10 px-4 py-1">
+        <div class="px-3 py-1.5 rounded-2xl bg-black/60 backdrop-blur-md border border-white/15 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="text-rose-400 animate-pulse text-sm">🎶</span>
+            <div class="truncate max-w-[130px] sm:max-w-[180px]">
+              <p id="liveSongTitle" class="text-[11px] font-bold text-white truncate">Aag Lagao Baby</p>
+              <p id="liveSongArtist" class="text-[9px] text-slate-400 truncate">Bahadur Media · Electric Pulse Mix</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <input type="file" id="livePhoneAudioInput" accept="audio/*" class="hidden" onchange="loadPhoneSongForLive(event)">
+            <button type="button" onclick="document.getElementById('livePhoneAudioInput').click()" title="Play Song from Phone" class="px-2 py-1 rounded-xl bg-purple-600/80 hover:bg-purple-600 text-white text-[10px] font-bold flex items-center gap-1 shadow">
+              <span>📁</span><span>Phone</span>
+            </button>
+            <button id="btnLiveMusicPlay" onclick="toggleLiveMusic()" class="px-2.5 py-1 rounded-xl bg-rose-600 text-white text-[10px] font-bold shadow active:scale-95">⏸ Pause</button>
+            <button onclick="nextLiveSong()" class="px-2 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[10px]">⏭</button>
+          </div>
+        </div>
+
+        <!-- Tap-to-play helper banner if audio waiting for gesture -->
+        <div id="liveAudioTapBanner" onclick="toggleLiveMusic()" class="mt-2 py-1.5 px-3 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg animate-pulse cursor-pointer border border-white/20 active:scale-95">
+          <span>🔊 Tap to Play Music: <span id="liveTapBannerTitle">Aag Lagao Baby</span> 🎶</span>
+        </div>
+      </div>
+
+      <!-- Central Gift Animation Overlay -->
+      <div id="liveGiftAnimOverlay" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-center pointer-events-none px-4">
+        <div class="inline-block p-4 rounded-3xl bg-black/90 backdrop-blur-xl border border-amber-500/70 shadow-2xl">
+          <span id="liveGiftIcon" class="text-5xl block mb-1 animate-bounce">🌹</span>
+          <p id="liveGiftName" class="text-amber-300 font-black text-sm">Red Rose</p>
+          <p class="text-[10px] text-slate-200 mt-0.5">Sent with love by <span id="liveGiftSender" class="text-rose-400 font-bold">Liam</span>!</p>
+        </div>
+      </div>
+
+      <!-- Floating Hearts Area -->
+      <div id="heartsContainer" class="absolute inset-0 z-15 pointer-events-none overflow-hidden"></div>
+
+      <!-- Live Stream Bottom Controls & Chat -->
+      <div class="relative z-10 p-4 space-y-2.5">
+        <!-- Live Comments Box (With Robot & User Profile Photos) -->
+        <div id="liveCommentsList" class="max-h-40 overflow-y-auto space-y-1.5 text-xs hide-scrollbar">
+          <!-- Comments with Avatars added dynamically -->
+        </div>
+
+        <!-- Chat Input & Live Action Buttons -->
+        <div class="flex items-center gap-2">
+          <input id="liveChatInput" type="text" placeholder="Say something nice..." class="flex-1 px-3 py-2 rounded-full bg-black/60 border border-white/20 text-white text-xs focus:outline-none focus:border-rose-500">
+          <button onclick="sendLiveComment()" class="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs shrink-0">➤</button>
+          <button onclick="openGiftModal()" class="w-9 h-9 rounded-full bg-amber-500 text-black flex items-center justify-center text-sm font-bold shrink-0 shadow-lg">🎁</button>
+          <button onclick="sendLiveHeart()" class="w-9 h-9 rounded-full bg-rose-500 text-white flex items-center justify-center text-sm font-bold shrink-0 animate-bounce">❤️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTY ROOM MODAL (2-Person Private Interactive Lounge) -->
+  <div id="modalPartyRoom" class="fixed inset-0 z-[80] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4" style="z-index: 800 !important;">
+    <div class="relative w-full max-w-sm rounded-3xl bg-[#0D0D20] border border-amber-500/40 p-5 space-y-4 text-center">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="text-left">
+          <h3 id="partyModalTitle" class="text-sm font-bold text-white flex items-center gap-1.5">🥂 Party Lounge #1</h3>
+          <p class="text-[10px] text-emerald-400">1-on-1 Private Room · 2 Seats Active</p>
+        </div>
+        <button onclick="closePartyRoom()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <!-- 2 Seats Layout -->
+      <div class="grid grid-cols-2 gap-4 py-2">
+        <!-- Seat 1: Host -->
+        <div onclick="openCurrentPartyHostProfile()" class="p-3 rounded-2xl bg-black/50 border border-amber-500/30 flex flex-col items-center gap-2 cursor-pointer hover:border-amber-400 transition-colors" title="View Host Profile">
+          <div class="relative w-16 h-16 rounded-full ring-2 ring-amber-400 p-0.5 bg-black">
+            <img id="partyHostImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full">
+            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-full bg-amber-500 text-black text-[8px] font-black">HOST</span>
+          </div>
+          <span id="partyHostNameLabel" class="text-xs font-bold text-white hover:text-amber-300">Host</span>
+          <span class="text-[9px] text-emerald-400">🎤 Mic Active</span>
+        </div>
+
+        <!-- Seat 2: Guest -->
+        <div onclick="openCurrentGuestSeatProfile()" class="p-3 rounded-2xl bg-black/50 border border-white/15 flex flex-col items-center gap-2 cursor-pointer hover:border-white/30 transition-colors" title="View Profile">
+          <div id="guestSeatAvatar" class="w-16 h-16 rounded-full border-2 border-dashed border-white/30 flex items-center justify-center text-slate-400 text-2xl overflow-hidden">
+            👤
+          </div>
+          <span id="guestSeatName" class="text-xs font-bold text-slate-300 hover:text-white">Empty Seat</span>
+          <button onclick="event.stopPropagation(); toggleTakeSeat()" id="btnTakeSeat" class="px-3 py-1 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-bold text-[10px]">
+            Take Seat 💺
+          </button>
+        </div>
+      </div>
+
+      <!-- Music & Room Status -->
+      <div class="p-2.5 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2 overflow-hidden text-left">
+          <span class="text-amber-400 animate-pulse text-sm">🎶</span>
+          <div class="truncate max-w-[120px] sm:max-w-[160px]">
+            <p id="partySongTitle" class="text-[11px] font-bold text-white truncate">Aag Lagao Baby</p>
+            <p id="partySongArtist" class="text-[9px] text-amber-300/80 truncate">Bahadur Media Party Mix</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <input type="file" id="partyPhoneAudioInput" accept="audio/*" class="hidden" onchange="loadPhoneSongForParty(event)">
+          <button type="button" onclick="document.getElementById('partyPhoneAudioInput').click()" title="Play Song from Phone" class="px-2 py-0.5 rounded-lg bg-purple-600/80 hover:bg-purple-600 text-white text-[9px] font-bold">
+            📁 Phone
+          </button>
+          <button onclick="togglePartyMusic()" id="btnPartyMusic" class="px-2 py-0.5 rounded-lg bg-amber-500 text-black text-[10px] font-bold">Pause ⏸</button>
+          <button onclick="nextPartySong()" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[10px]">⏭</button>
+        </div>
+      </div>
+
+      <!-- Tap-to-play helper banner for Party Room -->
+      <div id="partyAudioTapBanner" onclick="togglePartyMusic()" class="py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg animate-pulse cursor-pointer border border-white/20 active:scale-95">
+        <span>🔊 Tap to Play Music: <span id="partyTapBannerTitle">Aag Lagao Baby</span> 🎶</span>
+      </div>
+
+      <!-- Private Chat -->
+      <div id="partyChatBox" class="h-28 overflow-y-auto bg-black/60 rounded-xl p-2.5 text-left text-xs space-y-1.5">
+        <p class="text-slate-400 text-[10px]">🔒 Private encrypted 1-on-1 chat session started.</p>
+      </div>
+
+      <div class="flex gap-2">
+        <input id="partyChatInput" type="text" placeholder="Whisper in room..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-white/20 text-white text-xs">
+        <button onclick="sendPartyChatMessage()" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GIFTS MODAL -->
+  <div id="modalGiftCatalog" class="fixed inset-0 z-55 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-xs rounded-3xl bg-[#0E0E22] border border-amber-500/40 p-4 space-y-3">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h4 class="text-xs font-bold text-white flex items-center gap-1">🎁 Send a Gift</h4>
+        <button onclick="closeGiftModal()" class="text-slate-400 text-sm">✕</button>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center text-xs">
+        <div onclick="giveGift('Red Rose', 10, '🌹')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">🌹</span>
+          <span class="text-[10px] font-bold text-white block">Rose</span>
+          <span class="text-[9px] text-amber-300">10 🪙</span>
+        </div>
+        <div onclick="giveGift('Teddy', 50, '🧸')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">🧸</span>
+          <span class="text-[10px] font-bold text-white block">Teddy</span>
+          <span class="text-[9px] text-amber-300">50 🪙</span>
+        </div>
+        <div onclick="giveGift('Sports Car', 100, '🏎️')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">🏎️</span>
+          <span class="text-[10px] font-bold text-white block">Car</span>
+          <span class="text-[9px] text-amber-300">100 🪙</span>
+        </div>
+        <div onclick="giveGift('Diamond Ring', 500, '💍')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">💍</span>
+          <span class="text-[10px] font-bold text-white block">Ring</span>
+          <span class="text-[9px] text-amber-300">500 🪙</span>
+        </div>
+        <div onclick="giveGift('Royal Crown', 1000, '👑')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">👑</span>
+          <span class="text-[10px] font-bold text-white block">Crown</span>
+          <span class="text-[9px] text-amber-300">1000 🪙</span>
+        </div>
+        <div onclick="giveGift('Golden Dragon', 2000, '🐉')" class="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-rose-500 cursor-pointer">
+          <span class="text-2xl block mb-1">🐉</span>
+          <span class="text-[10px] font-bold text-white block">Dragon</span>
+          <span class="text-[9px] text-amber-300">2000 🪙</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- IN-APP FRAMED INTERSTITIAL AD MODAL (Safe Protected Container) -->
+  <div id="modalInAppAd" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-3" style="z-index: 900 !important;">
+    <div class="relative w-full max-w-lg h-[82vh] rounded-3xl bg-[#0B0B18] border border-amber-500/40 shadow-2xl flex flex-col overflow-hidden">
+      <div class="px-4 py-2.5 bg-[#0F0F24] border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <span>✨ Sponsored Partner</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">Protected In-App Frame</span>
+          </span>
+          <span id="adTargetRoomText" class="text-[10px] text-amber-300 font-bold ml-1"></span>
+        </div>
+        <button onclick="skipInAppAd()" id="btnSkipAd" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-extrabold text-xs shadow-md active:scale-95 transition-all">
+          Skip Ad (3s) ✕
+        </button>
+      </div>
+      <div class="flex-1 w-full bg-white relative">
+        <iframe id="inAppAdIframe" src="https://apiguinee.org/4/86b2b887eed9685fc5ae8c6c9a919c28" title="In-App Sponsor" class="w-full h-full border-0"></iframe>
+      </div>
+      <div class="px-4 py-2 bg-[#0F0F24] border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+        <span class="text-emerald-400 font-semibold">✓ In-App Protected View (Zero Redirect Outside App)</span>
+        <button onclick="skipInAppAd()" class="text-amber-300 hover:text-white underline font-bold px-2 py-1">Skip Ad ✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE MODAL (View Profile, Comments, Direct Chat) -->
+  <div id="modalUserProfile" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4" style="z-index: 1000 !important;">
+    <div class="relative w-full max-w-sm rounded-3xl bg-[#0F0F24] border border-rose-500/40 p-5 space-y-3.5 text-center text-slate-100 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <span class="text-xs font-bold text-amber-300">Creator Profile</span>
+        <button onclick="closeUserProfileModal()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-amber-400 to-rose-600 shadow-lg">
+          <img id="uProfileAvatar" src="" class="w-full h-full object-cover rounded-full">
+          <span class="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-full bg-amber-400 text-black text-[9px] font-black">VIP</span>
+        </div>
+        <h3 id="uProfileName" class="text-sm font-extrabold text-white mt-2 flex items-center justify-center gap-1">User <span class="text-blue-400">✓</span></h3>
+        <p id="uProfileBio" class="text-[11px] text-slate-300 mt-0.5">Live streaming host & music fan on Night Classes.</p>
+        <div class="flex items-center justify-center gap-3 mt-2 text-xs text-slate-400">
+          <span><strong id="uProfileFollowers" class="text-white">1,420</strong> Followers</span>
+          <span>·</span>
+          <span class="text-emerald-400 font-semibold">● Online</span>
+        </div>
+      </div>
+
+      <!-- Public Profile Comments -->
+      <div class="text-left space-y-1.5">
+        <p class="text-[10px] font-bold text-amber-300 uppercase tracking-wide">Public Profile Comments</p>
+        <div id="uProfileCommentsList" class="max-h-28 overflow-y-auto space-y-1 p-2 rounded-xl bg-black/50 border border-white/10 text-[11px] hide-scrollbar">
+          <p class="text-slate-300"><strong>Liam:</strong> Welcome to Night Classes! ❤️</p>
+          <p class="text-slate-300"><strong>Alex:</strong> Great live streams! 🎶</p>
+        </div>
+        <div class="flex items-center gap-1.5 pt-1">
+          <input id="uProfileCommentInput" type="text" placeholder="Write a comment..." class="flex-1 px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-white text-xs focus:outline-none focus:border-rose-500">
+          <button onclick="submitProfileComment()" class="px-3 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-xs shadow active:scale-95">Post</button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2 border-t border-white/10">
+        <button id="btnProfileChat" onclick="directChatFromProfile()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md flex items-center justify-center gap-1.5 active:scale-95">
+          <span>💬</span><span>Direct Chat</span>
+        </button>
+        <button onclick="giveGift('Red Rose', 10, '🌹')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-black text-xs shadow-md active:scale-95" title="Send Gift">
+          <span>🎁</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="modalAdminLogin" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4">
+    <div class="relative w-full max-w-sm rounded-3xl bg-[#0F0F24] border border-amber-500/50 p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">🔒 Admin Security Login</h3>
+        <button onclick="closeAdminLoginModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+      <p class="text-xs text-slate-400 leading-tight">Enter authorized master credentials to access the Night Classes Admin Panel.</p>
+      <div id="adminLoginErr" class="p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs hidden"></div>
+      <div>
+        <label class="block text-[11px] font-bold text-slate-300 mb-1">Admin Gmail</label>
+        <input id="adminEmailInput" type="email" placeholder="anjalibahadur3@gmail.com" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      </div>
+      <div>
+        <label class="block text-[11px] font-bold text-slate-300 mb-1">Password</label>
+        <input id="adminPassInput" type="password" placeholder="••••••••••••" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs font-mono">
+      </div>
+      <button onclick="submitAdminLogin()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-bold text-xs shadow-lg">
+        Authenticate & Unlock Admin 🚀
+      </button>
+      <p class="text-[10px] text-center text-slate-500">Night Classes Master Protection</p>
+    </div>
+  </div>
+
+  <!-- USER LOGIN / REGISTER MODAL -->
+  <div id="modalUserAuth" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4">
+    <div class="relative w-full max-w-sm rounded-3xl bg-[#0F0F24] border border-rose-500/50 p-6 shadow-2xl space-y-4 text-xs text-slate-100">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">👤 Night Classes Account</h3>
+        <button onclick="closeUserLoginModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+      <div class="flex items-center gap-3 p-3 rounded-2xl bg-black/40 border border-white/10">
+        <img id="userAuthAvatarPreview" src="${appLogo}" class="w-12 h-12 rounded-full object-cover border border-amber-400">
+        <div>
+          <button type="button" onclick="document.getElementById('userPhonePhotoInput').click()" class="px-2.5 py-1 rounded-xl bg-white/10 text-white font-bold text-[11px] hover:bg-white/20">📷 Photo from Phone</button>
+          <input type="file" id="userPhonePhotoInput" accept="image/*" class="hidden" onchange="handleUserPhotoUpload(event)">
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-bold text-slate-300 mb-1">Email Address</label>
+        <input id="userEmailInput" type="email" value="anjalibahadur3@gmail.com" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      </div>
+      <div>
+        <label class="block text-[11px] font-bold text-slate-300 mb-1">Password</label>
+        <input id="userPasswordInput" type="password" value="bahadur@2025#" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs font-mono">
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="submitUserAuth('login')" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md">Log In 🚀</button>
+        <button onclick="submitUserLogout()" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECHARGE MODAL (Binance Only) -->
+  <div id="modalRecharge" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-[#0D0D1E] border border-amber-500/40 p-5 space-y-4 text-xs text-slate-100">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="font-bold text-white text-sm flex items-center gap-1.5">🪙 Binance Coin Recharge</h3>
+        <button onclick="closeRechargeModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+      <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-1 text-center">
+        <p class="text-amber-300 font-bold text-xs uppercase">Binance Pay & USDT (TRC-20)</p>
+        <p class="text-white font-mono text-[11px]">Pay ID: <strong class="text-amber-400 select-all">98451230</strong></p>
+        <p class="text-slate-400 text-[10px] select-all truncate">Address: TJ7xK89sVwQpL34zmnBRte4519u2XyzLpq</p>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div onclick="selectPackage(100, 100)" class="p-2.5 rounded-xl bg-white/5 border border-amber-500/30 cursor-pointer hover:bg-amber-500/20">
+          <p class="font-bold text-amber-300 text-sm">100 🪙</p>
+          <p class="text-[10px] text-slate-300">$1.00 USDT</p>
+        </div>
+        <div onclick="selectPackage(500, 450)" class="p-2.5 rounded-xl bg-amber-500/20 border border-amber-500 cursor-pointer">
+          <p class="font-bold text-amber-300 text-sm">500 🪙</p>
+          <p class="text-[10px] text-slate-300">$4.50 USDT</p>
+        </div>
+        <div onclick="selectPackage(1200, 999)" class="p-2.5 rounded-xl bg-white/5 border border-amber-500/30 cursor-pointer hover:bg-amber-500/20">
+          <p class="font-bold text-amber-300 text-sm">1200 🪙</p>
+          <p class="text-[10px] text-slate-300">$9.99 USDT</p>
+        </div>
+      </div>
+      <input id="binanceTxId" type="text" placeholder="Enter Binance TxID / Transaction ID..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      <button onclick="submitRecharge()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-bold text-xs shadow-lg">
+        Submit Binance Recharge ⚡
+      </button>
+    </div>
+  </div>
+
+  <!-- WITHDRAW DOLLARS MODAL ($) -->
+  <div id="modalWithdraw" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-[#0D0D1E] border border-emerald-500/50 p-5 space-y-4 text-xs text-slate-100 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="font-bold text-white text-sm flex items-center gap-1.5 text-emerald-400">
+          <span>💸</span> <span>Withdraw Dollar Balance ($)</span>
+        </h3>
+        <button onclick="closeWithdrawModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+
+      <div class="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] text-emerald-300 font-bold block uppercase">Available to Cash Out</span>
+          <span class="text-lg font-black text-white" id="modalWithdrawAvail">$45.50 USD</span>
+        </div>
+        <span class="text-[10px] px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">Instant Payout</span>
+      </div>
+
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">1. Select Payout Method</label>
+        <div class="grid grid-cols-3 gap-1.5 text-center">
+          <div onclick="selectWithdrawMethod('bKash')" id="wm_bKash" class="p-2 rounded-xl bg-pink-600/30 border border-pink-500 text-pink-300 font-bold cursor-pointer">
+            bKash (বিকাশ)
+          </div>
+          <div onclick="selectWithdrawMethod('Nagad')" id="wm_Nagad" class="p-2 rounded-xl bg-white/5 border border-white/15 text-slate-300 font-bold cursor-pointer">
+            Nagad (নগদ)
+          </div>
+          <div onclick="selectWithdrawMethod('Binance')" id="wm_Binance" class="p-2 rounded-xl bg-white/5 border border-white/15 text-slate-300 font-bold cursor-pointer">
+            USDT (Binance)
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">2. Amount to Withdraw ($ USD)</label>
+        <input id="withdrawAmountInput" type="number" min="10" step="1" value="25" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs font-mono">
+        <p class="text-[9px] text-slate-400 mt-1">Minimum payout: $10.00 USD (No processing fee)</p>
+      </div>
+
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">3. Account Number / Phone / Wallet</label>
+        <input id="withdrawAccountInput" type="text" placeholder="e.g. 017xxxxxxxx or Binance Pay ID" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      </div>
+
+      <button onclick="submitWithdrawal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold text-xs shadow-lg shadow-emerald-500/30 active:scale-95 transition-all">
+        Confirm Payout Request 💸
+      </button>
+    </div>
+  </div>
+
+  <!-- UPLOAD REEL MODAL -->
+  <div id="modalUploadReel" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-[#0D0D1E] border border-rose-500/40 p-5 space-y-4 text-xs text-slate-100">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2">🎬 Upload 9:16 Reel</h3>
+        <button onclick="closeReelUploadModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">Video Title *</label>
+        <input id="upReelTitle" type="text" placeholder="e.g. Late Night Vibe & Acoustic Melody 🎶" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      </div>
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">YouTube Shorts or Reel URL *</label>
+        <input id="upReelUrl" type="text" placeholder="https://www.youtube.com/shorts/..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs font-mono">
+        <p class="text-[10px] text-slate-400 mt-1">youtube.com/shorts/... or youtu.be/... links supported</p>
+      </div>
+      <button onclick="submitUploadReel()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg shadow-rose-600/30">
+        Publish Reel 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- GO LIVE STUDIO MODAL -->
+  <div id="modalGoLive" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-[#0D0D1E] border border-rose-500/40 p-5 space-y-4 text-xs text-slate-100">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <h3 class="font-bold text-white text-sm flex items-center gap-1.5">🔴 Go Live Studio</h3>
+        <button onclick="closeGoLiveModal()" class="text-slate-400 text-lg">✕</button>
+      </div>
+      <div class="relative aspect-video rounded-2xl bg-black/80 border border-white/20 overflow-hidden flex items-center justify-center">
+        <img id="goLivePreviewImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-center">
+          <p class="text-xs font-bold text-white drop-shadow">📷 Camera & Face Preview</p>
+        </div>
+      </div>
+      <div class="space-y-1.5">
+        <input type="file" id="phoneCameraLiveInput" accept="image/*" capture="user" class="hidden" onchange="handleLiveCameraSnapshot(event)">
+        <button type="button" onclick="document.getElementById('phoneCameraLiveInput').click()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30">
+          <span>📸 Open Phone Camera / Take Live Face Photo</span>
+        </button>
+        <input type="file" id="phoneThumbnailInput" accept="image/*" class="hidden" onchange="handlePhoneThumbnail(event)">
+        <button type="button" onclick="document.getElementById('phoneThumbnailInput').click()" class="w-full py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs flex items-center justify-center gap-2">
+          <span>🖼️ Choose Cover from Phone Gallery</span>
+        </button>
+      </div>
+      <div>
+        <label class="block text-slate-300 mb-1 font-bold">Stream Title</label>
+        <input id="goLiveTitle" type="text" value="Late Night Chill Session ✨" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white text-xs">
+      </div>
+      <button onclick="startMyLiveStream()" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-bold text-xs shadow-lg">
+        Start Broadcasting Now 🔴
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const PORTRAITS = ["https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjuGQKHgP2K9ufEUpJgJHiLy1rb3HWWjM2JLUYu785b-odRCWjuNCx727oYsF9gnM6UrSchnnrM4HrTtKXIcIsgWgMxKPuOX-BEew0fKNclOuUh5f9HYki09ysigNExWdyvpKYHDkhcooJ7n30rB342T90ZrWotEKRXKTcYuEDCkqkfk-_vLC2MQs0zc6s/s7292/GridArt_20261027_215043022.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhv4ubLLZ4TYQJxxQbblCNwKxDdhnZOhPejbZZAaRMtaQIryVWNs_T3s4MH9rxQB9WhLIA_0YRW9JTBQK2IXBwCWDHdV1BIvzb8NTVsZlJnbN1C2ViHgLZVGZPRIG7rdzx6W533JAbq3iUIg7DG4ZvHhoRdxlNKuSR3lKbsu_rpEqe8_Dctzfgyx6an-i4/s7292/GridArt_20261027_215001419.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFFz47TWUlz8QIrWmts7Tjjun5hJeO0lSV8A31h-iNdT3NKSjbkZGaSenQbFid1TMosHbxYAN1CQYVI7DeILbxeH0NYLvM0FsbvWR_1uoUMPAH0Mfca_rluN4CXIpQdS13mURNyt442Lql7Mwj95kyywRRDSKI7TT-jH7w9-q7ixLz5IGZfXRV_woJj8A/s7292/GridArt_20261027_214920227.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnoJC0qBUTpag4BOCTKnB2YubTl8yrhJHHJHD0tk12MH400v-AmqfiN2vTuyGxP3ENPXHz-A2AKwfKkXoUtwgs0rsMogaj94Y1e0xkEmoSVWEz5sOy4OwW92F8uJEdPAl2BkPpFKp2KJywcRz9ywHk71Sae5F0rOHTtdv1gLHVh8D3TWzMNXBUsWBnzns/s7292/GridArt_20261027_214759390.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipOO0iWEtKCFsHv0mT26xZEJgU_N48En1mlFhp0jzpi0aJTAubN8DxpIGmPzoTdG8A0CDdCzc9ntk0O514AW9DNte60nTfH8wYTYf9ukTr15os-4tBH-ScytNU78xvOsCfuzE6lTqiPrwA5I1BOms8w-r1dyK-ez9MS0qnKez49EE6BUONcGnP5-vXqQU/s7292/GridArt_20261027_214713555.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdq7zAirJF8TbJBDZl202uMWvaVctpJHhb07955l-K5VkOOXVOlubwzTljkK0rSbKv7EN4OwYxZ_Oj1N7GdXagJ75UHk1oeYVnWDUjZ_PJHjlK3rw-WA4ohEyhlGUz4lZ0dAJnN8uhCsGEjJW4BfMmcn2npbx5oLhC3_CQcBiRlukzam2dnIlM-4E1mjs/s7292/GridArt_20261027_213649856.jpg","https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&auto=format&fit=crop&q=80"];
+    const PARTY_COVERS = ["https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjuGQKHgP2K9ufEUpJgJHiLy1rb3HWWjM2JLUYu785b-odRCWjuNCx727oYsF9gnM6UrSchnnrM4HrTtKXIcIsgWgMxKPuOX-BEew0fKNclOuUh5f9HYki09ysigNExWdyvpKYHDkhcooJ7n30rB342T90ZrWotEKRXKTcYuEDCkqkfk-_vLC2MQs0zc6s/s7292/GridArt_20261027_215043022.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhv4ubLLZ4TYQJxxQbblCNwKxDdhnZOhPejbZZAaRMtaQIryVWNs_T3s4MH9rxQB9WhLIA_0YRW9JTBQK2IXBwCWDHdV1BIvzb8NTVsZlJnbN1C2ViHgLZVGZPRIG7rdzx6W533JAbq3iUIg7DG4ZvHhoRdxlNKuSR3lKbsu_rpEqe8_Dctzfgyx6an-i4/s7292/GridArt_20261027_215001419.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFFz47TWUlz8QIrWmts7Tjjun5hJeO0lSV8A31h-iNdT3NKSjbkZGaSenQbFid1TMosHbxYAN1CQYVI7DeILbxeH0NYLvM0FsbvWR_1uoUMPAH0Mfca_rluN4CXIpQdS13mURNyt442Lql7Mwj95kyywRRDSKI7TT-jH7w9-q7ixLz5IGZfXRV_woJj8A/s7292/GridArt_20261027_214920227.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnoJC0qBUTpag4BOCTKnB2YubTl8yrhJHHJHD0tk12MH400v-AmqfiN2vTuyGxP3ENPXHz-A2AKwfKkXoUtwgs0rsMogaj94Y1e0xkEmoSVWEz5sOy4OwW92F8uJEdPAl2BkPpFKp2KJywcRz9ywHk71Sae5F0rOHTtdv1gLHVh8D3TWzMNXBUsWBnzns/s7292/GridArt_20261027_214759390.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipOO0iWEtKCFsHv0mT26xZEJgU_N48En1mlFhp0jzpi0aJTAubN8DxpIGmPzoTdG8A0CDdCzc9ntk0O514AW9DNte60nTfH8wYTYf9ukTr15os-4tBH-ScytNU78xvOsCfuzE6lTqiPrwA5I1BOms8w-r1dyK-ez9MS0qnKez49EE6BUONcGnP5-vXqQU/s7292/GridArt_20261027_214713555.jpg","https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdq7zAirJF8TbJBDZl202uMWvaVctpJHhb07955l-K5VkOOXVOlubwzTljkK0rSbKv7EN4OwYxZ_Oj1N7GdXagJ75UHk1oeYVnWDUjZ_PJHjlK3rw-WA4ohEyhlGUz4lZ0dAJnN8uhCsGEjJW4BfMmcn2npbx5oLhC3_CQcBiRlukzam2dnIlM-4E1mjs/s7292/GridArt_20261027_213649856.jpg","https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&auto=format&fit=crop&q=80"];
+    const HOST_NAMES = ["Tania Sultana","Nafisa Jahan","Priya Roy","Meghla Akter","Farzana Mimi","Bristi Khan","Nusrat Fariha","Sneha Chowdhury","Anika Tabassum","Puja Sen","Ishrat Jahan","Laboni Roy","Rimi Akter","Samira Nigar","Tasnia Mim","Afsana Mimi","Sabrina Noor","Sadia Afrin","Monira Begum","Zareen Tasnim"];
+    let PLAYLIST = [{"id":"track_1","title":"Aag Lagao Baby","artist":"Bahadur Media · Electric Pulse Mix","category":"dance","url":"https://files.catbox.moe/depbf0.mp3","duration":"2:55","relativeUrl":"https://files.catbox.moe/depbf0.mp3","fallbackUrl":"https://files.catbox.moe/depbf0.mp3"},{"id":"track_2","title":"Aaja Nachle","artist":"Bahadur Media · Electric Pulse Mix Master","category":"dance","url":"https://files.catbox.moe/of1i0e.mp3","duration":"3:05","relativeUrl":"https://files.catbox.moe/of1i0e.mp3","fallbackUrl":"https://files.catbox.moe/of1i0e.mp3"},{"id":"track_3","title":"Aashiqon Ki Colony","artist":"Bahadur Media · Original Mix V1","category":"romance","url":"https://files.catbox.moe/ixrut5.mp3","duration":"3:32","relativeUrl":"https://files.catbox.moe/ixrut5.mp3","fallbackUrl":"https://files.catbox.moe/ixrut5.mp3"},{"id":"track_4","title":"Bijuria Dance","artist":"Bahadur Media · Original Dance Mix Master","category":"dance","url":"https://files.catbox.moe/vjt8xu.mp3","duration":"3:02","relativeUrl":"https://files.catbox.moe/vjt8xu.mp3","fallbackUrl":"https://files.catbox.moe/vjt8xu.mp3"},{"id":"track_5","title":"Boss Agaya","artist":"Bahadur Media · Original Mix V1 Master","category":"hiphop","url":"https://files.catbox.moe/b5q4rb.mp3","duration":"3:01","relativeUrl":"https://files.catbox.moe/b5q4rb.mp3","fallbackUrl":"https://files.catbox.moe/b5q4rb.mp3"},{"id":"track_6","title":"Deshi Girl","artist":"Bahadur Media · Original Mix V1 Master","category":"dance","url":"https://files.catbox.moe/vl94nv.mp3","duration":"2:57","relativeUrl":"https://files.catbox.moe/vl94nv.mp3","fallbackUrl":"https://files.catbox.moe/vl94nv.mp3"},{"id":"track_7","title":"Ghis Ghis Ghis","artist":"Bahadur Media · Club Beats","category":"dance","url":"https://files.catbox.moe/us2ggb.mp3","duration":"3:11","relativeUrl":"https://files.catbox.moe/us2ggb.mp3","fallbackUrl":"https://files.catbox.moe/us2ggb.mp3"},{"id":"track_8","title":"Hellallallo Baby","artist":"Bahadur Media · Electro Groove","category":"dance","url":"https://files.catbox.moe/bm8g86.mp3","duration":"2:49","relativeUrl":"https://files.catbox.moe/bm8g86.mp3","fallbackUrl":"https://files.catbox.moe/bm8g86.mp3"},{"id":"track_9","title":"Jawaani Pulse","artist":"Babu Bahadur, Parvesh, Liton · Original Mix","category":"dance","url":"https://files.catbox.moe/uxclz1.mp3","duration":"2:58","relativeUrl":"https://files.catbox.moe/uxclz1.mp3","fallbackUrl":"https://files.catbox.moe/uxclz1.mp3"},{"id":"track_10","title":"Night Classes Anthem","artist":"Bahadur Media · Night Pulse Mix","category":"romance","url":"https://files.catbox.moe/lgka9u.mp3","duration":"3:15","relativeUrl":"https://files.catbox.moe/lgka9u.mp3","fallbackUrl":"https://files.catbox.moe/lgka9u.mp3"},{"id":"track_11","title":"Midnight Chill Lounge","artist":"Bahadur Media · Acoustic Beats","category":"romance","url":"https://files.catbox.moe/9ammix.mp3","duration":"3:20","relativeUrl":"https://files.catbox.moe/9ammix.mp3","fallbackUrl":"https://files.catbox.moe/9ammix.mp3"},{"id":"track_12","title":"Starlight Romance","artist":"Bahadur Media · Deep House Remix","category":"dance","url":"https://files.catbox.moe/a7ma1w.mp3","duration":"3:08","relativeUrl":"https://files.catbox.moe/a7ma1w.mp3","fallbackUrl":"https://files.catbox.moe/a7ma1w.mp3"},{"id":"track_13","title":"Party Room Special Mix","artist":"Bahadur Media · 1-on-1 Groove","category":"dance","url":"https://files.catbox.moe/82tael.mp3","duration":"3:25","relativeUrl":"https://files.catbox.moe/82tael.mp3","fallbackUrl":"https://files.catbox.moe/82tael.mp3"}];
+    try {
+      const customAudio = localStorage.getItem('nc_custom_audio');
+      if (customAudio) {
+        const parsedAudio = JSON.parse(customAudio);
+        if (parsedAudio && parsedAudio.url && parsedAudio.url.includes('catbox.moe')) {
+          PLAYLIST.unshift(parsedAudio);
+        } else {
+          localStorage.removeItem('nc_custom_audio');
+        }
+      }
+    } catch(e) {}
+
+    let coins = parseInt(localStorage.getItem('nc_coins') || '300');
+    let freeMsgs = parseInt(localStorage.getItem('nc_free_msgs') || '61');
+    let dollarBalance = parseFloat(localStorage.getItem('nc_dollars') || '45.50');
+    let selectedWithdrawMethod = 'bKash';
+    let currentTab = 'live';
+    let isGuestSeated = false;
+    let isPartyMusicPlaying = true;
+    let liveMusicAudio = null;
+    let partyMusicAudio = null;
+    let liveRobotInterval = null;
+    let currentLiveSongIdx = 0;
+    let currentPartySongIdx = 0;
+
+    const REELS_DATA = [
+      { id: 'kJQP7kiw5Fk', title: 'Rainy Night Relaxing Lo-Fi Beats 🌧️🎵 #shorts #music', uploader: 'Priya Roy', likes: 1420 },
+      { id: 'JGwWNGJdvx8', title: 'Late Night Talk & Live Guitar Session 🎧✨', uploader: 'Tania Sultana', likes: 2380 },
+      { id: '2Vv-BfVoq4g', title: 'Midnight City Lights & Cozy Vibes 🌙✨ #chill #nightclasses', uploader: 'Nusrat Fariha', likes: 970 }
+    ];
+    let reelIndex = 0;
+
+    function syncCoins() {
+      const hc = document.getElementById('headerCoins');
+      if (hc) hc.innerText = coins + ' Coins';
+      const dc = document.getElementById('dashCoins');
+      if (dc) dc.innerText = coins;
+      localStorage.setItem('nc_coins', coins);
+      localStorage.setItem('nc_free_msgs', freeMsgs);
+    }
+    syncCoins();
+
+    function syncDollars() {
+      const dd = document.getElementById('dashDollars');
+      if (dd) dd.innerText = '$' + dollarBalance.toFixed(2);
+      const pda = document.getElementById('profileDollarAmount');
+      if (pda) pda.innerText = '$' + dollarBalance.toFixed(2) + ' USD';
+      const mwa = document.getElementById('modalWithdrawAvail');
+      if (mwa) mwa.innerText = '$' + dollarBalance.toFixed(2) + ' USD';
+      localStorage.setItem('nc_dollars', dollarBalance.toString());
+    }
+    syncDollars();
+
+    function openWithdrawModal() {
+      syncDollars();
+      document.getElementById('modalWithdraw').classList.remove('hidden');
+      document.getElementById('modalWithdraw').classList.add('flex');
+    }
+    function closeWithdrawModal() {
+      document.getElementById('modalWithdraw').classList.add('hidden');
+      document.getElementById('modalWithdraw').classList.remove('flex');
+    }
+    function selectWithdrawMethod(method) {
+      selectedWithdrawMethod = method;
+      ['bKash', 'Nagad', 'Binance'].forEach(m => {
+        const el = document.getElementById('wm_' + m);
+        if (el) {
+          if (m === method) {
+            el.className = "p-2 rounded-xl bg-pink-600/40 border border-pink-400 text-pink-200 font-bold cursor-pointer shadow";
+          } else {
+            el.className = "p-2 rounded-xl bg-white/5 border border-white/15 text-slate-300 font-bold cursor-pointer";
+          }
+        }
+      });
+    }
+    function submitWithdrawal() {
+      const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
+      const acc = document.getElementById('withdrawAccountInput').value.trim();
+      if (isNaN(amt) || amt < 10) {
+        alert('Minimum withdrawal amount is $10.00 USD.');
+        return;
+      }
+      if (amt > dollarBalance) {
+        alert('Insufficient dollar balance! You have $' + dollarBalance.toFixed(2) + ' USD available.');
+        return;
+      }
+      if (!acc) {
+        alert('Please enter your ' + selectedWithdrawMethod + ' account number or wallet address.');
+        return;
+      }
+      dollarBalance -= amt;
+      syncDollars();
+      closeWithdrawModal();
+      alert('Withdrawal request of $' + amt.toFixed(2) + ' USD via ' + selectedWithdrawMethod + ' to (' + acc + ') has been submitted successfully! Processing time: 5-15 minutes.');
+    }
+
+    function handleLiveCameraSnapshot(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          userAvatarUrl = evt.target.result;
+          const previewImg = document.getElementById('goLivePreviewImg');
+          if (previewImg) previewImg.src = userAvatarUrl;
+          const uBanner = document.getElementById('userBannerAvatar');
+          if (uBanner) uBanner.src = userAvatarUrl;
+          const profImg = document.getElementById('profileUserAvatarImg');
+          if (profImg) profImg.src = userAvatarUrl;
+          localStorage.setItem('nc_user_avatar', userAvatarUrl);
+          alert('Face photo captured successfully! Real face set for your live broadcast.');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handlePhoneThumbnail(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          userAvatarUrl = evt.target.result;
+          const previewImg = document.getElementById('goLivePreviewImg');
+          if (previewImg) previewImg.src = userAvatarUrl;
+          localStorage.setItem('nc_user_avatar', userAvatarUrl);
+          alert('Cover photo selected from phone!');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    let userCameraStream = null;
+    let isHtmlCamOn = true;
+    let isHtmlMicOn = true;
+
+    async function startUserWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 } },
+          audio: true
+        });
+        userCameraStream = stream;
+        const v = document.getElementById('liveUserCameraVideo');
+        const bgImg = document.getElementById('liveStreamBg');
+        if (v) {
+          v.srcObject = stream;
+          v.classList.remove('hidden');
+          v.play().catch(e => console.warn(e));
+        }
+        if (bgImg) bgImg.classList.add('hidden');
+      } catch(err) {
+        console.warn('Camera access denied or unsupported:', err);
+        const bgImg = document.getElementById('liveStreamBg');
+        if (bgImg) bgImg.classList.remove('hidden');
+      }
+    }
+
+    function stopUserWebcam() {
+      if (userCameraStream) {
+        userCameraStream.getTracks().forEach(t => t.stop());
+        userCameraStream = null;
+      }
+      const v = document.getElementById('liveUserCameraVideo');
+      if (v) {
+        v.classList.add('hidden');
+        v.srcObject = null;
+      }
+      const bgImg = document.getElementById('liveStreamBg');
+      if (bgImg) bgImg.classList.remove('hidden');
+    }
+
+    function toggleHtmlCam() {
+      if (userCameraStream) {
+        isHtmlCamOn = !isHtmlCamOn;
+        userCameraStream.getVideoTracks().forEach(t => t.enabled = isHtmlCamOn);
+        const btn = document.getElementById('btnHtmlCam');
+        if (btn) btn.className = isHtmlCamOn ? "w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow" : "w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs shadow";
+      }
+    }
+
+    function toggleHtmlMic() {
+      if (userCameraStream) {
+        isHtmlMicOn = !isHtmlMicOn;
+        userCameraStream.getAudioTracks().forEach(t => t.enabled = isHtmlMicOn);
+        const btn = document.getElementById('btnHtmlMic');
+        if (btn) btn.className = isHtmlMicOn ? "w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow" : "w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs shadow";
+      }
+    }
+
+    let userAvatarUrl = PORTRAITS[0];
+    let userEmail = localStorage.getItem('nc_user_email') || 'anjalibahadur3@gmail.com';
+
+    function initUserAuth() {
+      const savedEmail = localStorage.getItem('nc_user_email');
+      const savedAvatar = localStorage.getItem('nc_user_avatar');
+      if (savedAvatar) {
+        userAvatarUrl = savedAvatar;
+        const uBanner = document.getElementById('userBannerAvatar');
+        if (uBanner) uBanner.src = savedAvatar;
+      }
+      const label = document.getElementById('headerAuthText');
+      if (label) {
+        label.innerText = savedEmail ? savedEmail.split('@')[0] : 'Log In';
+      }
+    }
+    initUserAuth();
+
+    function openUserLoginModal() {
+      document.getElementById('modalUserAuth').classList.remove('hidden');
+      document.getElementById('modalUserAuth').classList.add('flex');
+    }
+    function closeUserLoginModal() {
+      document.getElementById('modalUserAuth').classList.add('hidden');
+      document.getElementById('modalUserAuth').classList.remove('flex');
+    }
+    function handleUserPhotoUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          userAvatarUrl = evt.target.result;
+          document.getElementById('userAuthAvatarPreview').src = userAvatarUrl;
+          const uBanner = document.getElementById('userBannerAvatar');
+          if (uBanner) uBanner.src = userAvatarUrl;
+          localStorage.setItem('nc_user_avatar', userAvatarUrl);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    function submitUserAuth(mode) {
+      const em = document.getElementById('userEmailInput').value.trim();
+      if (!em) return alert('Please enter your email.');
+      userEmail = em;
+      localStorage.setItem('nc_user_email', em);
+      document.getElementById('headerAuthText').innerText = em.split('@')[0];
+      alert('Logged in as ' + em);
+      closeUserLoginModal();
+    }
+    function submitUserLogout() {
+      localStorage.removeItem('nc_user_email');
+      userEmail = '';
+      document.getElementById('headerAuthText').innerText = 'Log In';
+      alert('Logged out successfully.');
+      closeUserLoginModal();
+    }
+
+    // In-App Interstitial Ad & Room Entry Logic (Direct Links)
+    let pendingRoomAction = null;
+    let adCountdown = 3;
+    let adCountdownTimer = null;
+
+    function triggerLiveRoomWithAd(num, host, img, viewers) {
+      // 1. Immediately play room song synchronously on click gesture so browser permits audio
+      playLiveSong(num - 1);
+
+      // 2. Queue opening this exact Live Room with Room ID (#num), host avatar and robot chat
+      pendingRoomAction = function() {
+        openLiveRoom(num, host, img, viewers);
+      };
+
+      // 3. Show In-App Ad Frame (apiguinee.org) with 3-second timer and Skip Ad button
+      showInAppDirectAd('https://apiguinee.org/4/86b2b887eed9685fc5ae8c6c9a919c28', 'Live Room #' + num);
+    }
+
+    function triggerPartyRoomWithAd(num, isLocked, img) {
+      // 1. Immediately play room song synchronously on click gesture
+      playPartySong(num - 1);
+
+      // 2. Queue entering this exact Party Room with Room ID (#num)
+      pendingRoomAction = function() {
+        handlePartyClick(num, isLocked, img);
+      };
+
+      // 3. Show In-App Ad Frame (gullible-thanks.com) with 3-second timer and Skip Ad button
+      showInAppDirectAd('https://gullible-thanks.com/Zk3z7X', 'Party Lounge #' + num);
+    }
+
+    function showInAppDirectAd(url, roomLabel) {
+      const modal = document.getElementById('modalInAppAd');
+      const iframe = document.getElementById('inAppAdIframe');
+      const btn = document.getElementById('btnSkipAd');
+      const targetTxt = document.getElementById('adTargetRoomText');
+      if (targetTxt && roomLabel) targetTxt.innerText = 'Entering ' + roomLabel + '...';
+      if (iframe) iframe.src = url;
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      adCountdown = 3;
+      if (btn) btn.innerText = 'Skip Ad (' + adCountdown + 's) ✕';
+      if (adCountdownTimer) clearInterval(adCountdownTimer);
+      adCountdownTimer = setInterval(function() {
+        adCountdown--;
+        if (adCountdown <= 0) {
+          clearInterval(adCountdownTimer);
+          adCountdownTimer = null;
+          // When ad finishes ("এড শেষে"), automatically enter the room!
+          skipInAppAd();
+        } else {
+          if (btn) btn.innerText = 'Skip Ad (' + adCountdown + 's) ✕';
+        }
+      }, 1000);
+    }
+
+    function skipInAppAd() {
+      if (adCountdownTimer) {
+        clearInterval(adCountdownTimer);
+        adCountdownTimer = null;
+      }
+      const modal = document.getElementById('modalInAppAd');
+      const iframe = document.getElementById('inAppAdIframe');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      if (iframe) iframe.src = 'about:blank';
+      // When ad is cut/skipped or ends, immediately open the room with its ID!
+      if (typeof pendingRoomAction === 'function') {
+        const act = pendingRoomAction;
+        pendingRoomAction = null;
+        act();
+      }
+    }
+
+    // User Profile Viewer Modal Logic (Photo, Bio, Comments, Direct Chat)
+    let uProfileCurrentName = '';
+    let currentLiveHostData = { name: 'Host', avatar: PORTRAITS[0], followers: 1420 };
+    let currentPartyHostData = { name: 'Host', avatar: PORTRAITS[0], followers: 1250 };
+
+    function openUserProfileView(name, avatar, followers, bio) {
+      uProfileCurrentName = name;
+      const modal = document.getElementById('modalUserProfile');
+      if (!modal) return;
+      document.getElementById('uProfileAvatar').src = avatar || PORTRAITS[0];
+      document.getElementById('uProfileName').innerHTML = name + ' <span class="text-blue-400">✓</span>';
+      document.getElementById('uProfileBio').innerText = bio || (name + ' is an active creator and listener on Night Classes!');
+      document.getElementById('uProfileFollowers').innerText = (followers || 1240).toLocaleString();
+      modal.style.zIndex = '1000';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openCurrentLiveHostProfile() {
+      openUserProfileView(currentLiveHostData.name, currentLiveHostData.avatar, currentLiveHostData.followers, currentLiveHostData.name + ' is streaming live on Night Classes! Connect & send gifts ❤️');
+    }
+
+    function openCurrentPartyHostProfile() {
+      openUserProfileView(currentPartyHostData.name, currentPartyHostData.avatar, currentPartyHostData.followers, currentPartyHostData.name + ' is hosting this 1-on-1 private party lounge 🥂');
+    }
+
+    function openCurrentGuestSeatProfile() {
+      if (isGuestSeated) {
+        openUserProfileView('Alex Vance (You)', PORTRAITS[4], 1240, 'Active user and VIP listener on Night Classes!');
+      } else {
+        alert('This seat is currently empty. Click "Take Seat" to join the conversation!');
+      }
+    }
+
+    function openCurrentReelUserProfile() {
+      const uploaderEl = document.getElementById('reelUploader');
+      const uploader = uploaderEl ? uploaderEl.innerText.replace('✓', '').trim() : 'Priya Roy';
+      openUserProfileView(uploader, PORTRAITS[2], 2890, uploader + ' is a verified creator on Night Classes! Check out all Reels and join streams ✨');
+    }
+
+    function closeUserProfileModal() {
+      const modal = document.getElementById('modalUserProfile');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function submitProfileComment() {
+      const inp = document.getElementById('uProfileCommentInput');
+      const val = inp ? inp.value.trim() : '';
+      if (!val) return;
+      const list = document.getElementById('uProfileCommentsList');
+      if (list) {
+        const p = document.createElement('p');
+        p.className = 'text-slate-200';
+        p.innerHTML = '<strong class="text-rose-400">' + (userEmail ? userEmail.split('@')[0] : 'You') + ':</strong> ' + val;
+        list.appendChild(p);
+        list.scrollTop = list.scrollHeight;
+      }
+      inp.value = '';
+    }
+
+    function directChatFromProfile() {
+      closeUserProfileModal();
+      if (uProfileCurrentName) {
+        startChatWith(uProfileCurrentName);
+      }
+    }
+
+    // Render 20 Live Room Cards with REAL PHOTOS
+    const liveGrid = document.getElementById('liveGrid');
+    for (let i = 1; i <= 20; i++) {
+      const img = PORTRAITS[(i - 1) % PORTRAITS.length];
+      const hostName = HOST_NAMES[(i - 1) % HOST_NAMES.length];
+      const viewers = 140 + ((i * 37) % 320);
+
+      const div = document.createElement('div');
+      div.className = "rounded-2xl overflow-hidden bg-[#0F0F24] border border-purple-500/20 hover:border-rose-500/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-rose-950/30 flex flex-col group";
+      div.innerHTML = `
+        <div class="relative aspect-[4/3] bg-black overflow-hidden">
+          <img src="${img}" alt="${hostName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F24] via-transparent to-black/40"></div>
+          <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-rose-600 text-white text-[9px] font-black animate-pulse shadow">
+            ● LIVE
+          </span>
+          <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-white text-[9px] font-bold">
+            👁️ ${viewers}
+          </span>
+        </div>
+        <div class="p-2.5 space-y-1">
+          <p class="text-xs font-bold text-white truncate flex items-center gap-1">
+            <span>${hostName}</span>
+            <span class="text-[9px] text-blue-400">✓</span>
+          </p>
+          <p class="text-[10px] text-slate-400 truncate">Night Classes Lounge #${i}</p>
+        </div>
+      `;
+      div.onclick = () => {
+        triggerLiveRoomWithAd(i, hostName, img, viewers);
+      };
+      liveGrid.appendChild(div);
+    }
+
+    // Render 20 Party Room Cards with REAL PHOTOS
+    const partyGrid = document.getElementById('partyGrid');
+    for (let i = 1; i <= 20; i++) {
+      const img = PARTY_COVERS[(i - 1) % PARTY_COVERS.length];
+      const isLocked = (i % 3 === 0);
+
+      const div = document.createElement('div');
+      div.className = "rounded-2xl overflow-hidden bg-[#0F0F24] border border-amber-500/20 hover:border-amber-500/60 cursor-pointer transition-all duration-300 hover:shadow-xl flex flex-col group";
+      div.innerHTML = `
+        <div class="relative aspect-[4/3] bg-black overflow-hidden">
+          <img src="${img}" alt="Party Room #${i}" class="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F24] via-transparent to-black/50"></div>
+          <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md ${isLocked ? 'bg-amber-500 text-black' : 'bg-emerald-600 text-white'} text-[9px] font-bold">
+            ${isLocked ? '🔒 Locked' : '2 Seats Free'}
+          </span>
+          <span class="absolute bottom-2 left-2 text-xl">${isLocked ? '🔒' : '🥂'}</span>
+        </div>
+        <div class="p-2.5 space-y-1">
+          <p class="text-xs font-bold text-white truncate">Party Lounge #${i}</p>
+          <p class="text-[10px] text-slate-400 truncate">${isLocked ? 'Passcode Protected' : 'Private 1-on-1 Chat'}</p>
+        </div>
+      `;
+      div.onclick = () => {
+        triggerPartyRoomWithAd(i, isLocked, img);
+      };
+      partyGrid.appendChild(div);
+    }
+
+    // Render Follow Users List
+    const followList = document.getElementById('followList');
+    HOST_NAMES.forEach((name, idx) => {
+      const img = PORTRAITS[idx % PORTRAITS.length];
+      const div = document.createElement('div');
+      div.className = "p-3 rounded-2xl bg-[#0F0F24] border border-white/10 flex items-center justify-between";
+      div.innerHTML = `
+        <div onclick="openUserProfileView('${name}', '${img}', ${(idx+1)*140}, '${name} is a verified creator on Night Classes! Follow to stay connected ❤️')" class="flex items-center gap-3 cursor-pointer group" title="View Profile">
+          <div class="w-10 h-10 rounded-full ring-2 ring-amber-400 p-0.5 bg-black overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
+            <img src="${img}" class="w-full h-full object-cover rounded-full">
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-white flex items-center gap-1 group-hover:text-rose-400">${name} <span class="text-[9px] text-blue-400">✓</span></h4>
+            <p class="text-[10px] text-slate-400">${(idx+1)*140} followers</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="event.stopPropagation(); startChatWith('${name}')" class="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">Chat</button>
+          <button onclick="event.stopPropagation(); toggleFollow(this)" class="px-3 py-1 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow">+ Follow</button>
+        </div>
+      `;
+      followList.appendChild(div);
+    });
+
+    // Navigation Switcher
+    function nav(tab) {
+      ['live', 'party', 'reels', 'follow', 'messages', 'notifications', 'profile', 'admin'].forEach(t => {
+        const view = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (view) view.classList.add('hidden');
+        const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn) btn.className = "flex flex-col items-center justify-center text-slate-400";
+      });
+
+      const activeView = document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1));
+      if (activeView) activeView.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+      if (activeBtn) activeBtn.className = "flex flex-col items-center justify-center text-rose-500 font-bold";
+
+      document.getElementById('countryBar').style.display = (tab === 'live' || tab === 'party') ? 'flex' : 'none';
+      
+      // Admin Panel Footer ONLY shows on Home (Live) page, completely hidden on the other 6 pages
+      const footer = document.getElementById('appFooter');
+      if (footer) {
+        footer.style.display = (tab === 'live') ? 'flex' : 'none';
+      }
+
+      currentTab = tab;
+    }
+
+    function selectCountry(code) {
+      ['ALL','US','UK','AE','IN','BD'].forEach(c => {
+        const btn = document.getElementById('cnt' + c);
+        if(btn) btn.className = (c === code) ? "px-3 py-1 rounded-xl bg-rose-600 text-white font-semibold shrink-0" : "px-3 py-1 rounded-xl bg-white/5 text-slate-300 shrink-0";
+      });
+      alert(code === 'ALL' ? 'Showing all regions' : 'Filtered to ' + code);
+    }
+
+    const ROBOT_AUDIENCE_MEMBERS = [
+      { id: 'rb1', name: 'Liam Carter', tag: 'VIP', avatar: PORTRAITS[0] },
+      { id: 'rb2', name: 'Noah Davis', tag: 'TOP', avatar: PORTRAITS[1] },
+      { id: 'rb3', name: 'Ethan Hunt', tag: 'NEW', avatar: PORTRAITS[2] },
+      { id: 'rb4', name: 'Lucas Scott', tag: 'MVP', avatar: PORTRAITS[3] },
+      { id: 'rb5', name: 'Alex Vance', tag: 'FAN', avatar: PORTRAITS[4] },
+      { id: 'rb6', name: 'David Miller', tag: 'VIP', avatar: PORTRAITS[5] },
+      { id: 'rb7', name: 'James Wilson', tag: 'KING', avatar: PORTRAITS[6] },
+      { id: 'rb8', name: 'Daniel Brown', tag: 'TOP', avatar: PORTRAITS[7] }
+    ];
+
+    function renderRobotAudienceBar() {
+      const row = document.getElementById('robotAudienceRow');
+      if (!row) return;
+      row.innerHTML = '';
+      ROBOT_AUDIENCE_MEMBERS.forEach(m => {
+        const d = document.createElement('div');
+        d.id = 'aud_icon_' + m.id;
+        d.className = "flex flex-col items-center shrink-0 transition-transform duration-300 cursor-pointer hover:scale-105";
+        d.onclick = () => {
+          openUserProfileView(m.name, m.avatar, 1420, m.name + ' is an active VIP audience member in Night Classes.');
+        };
+        d.innerHTML = `
+          <div class="relative w-9 h-9 rounded-full p-[1.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 overflow-hidden shadow">
+            <img src="${m.avatar}" class="w-full h-full object-cover rounded-full" alt="${m.name}">
+            <span class="absolute -bottom-0.5 -right-0.5 px-1 rounded-full bg-amber-500 text-black font-black text-[7px] leading-tight">${m.tag}</span>
+          </div>
+          <span class="text-[8px] text-slate-200 font-medium mt-0.5 truncate max-w-[44px] text-center">${m.name.split(' ')[0]}</span>
+        `;
+        row.appendChild(d);
+      });
+    }
+
+    function triggerGiftAnim(icon, name, sender) {
+      const overlay = document.getElementById('liveGiftAnimOverlay');
+      if (!overlay) return;
+      document.getElementById('liveGiftIcon').innerText = icon;
+      document.getElementById('liveGiftName').innerText = name;
+      document.getElementById('liveGiftSender').innerText = sender;
+      overlay.classList.remove('hidden');
+      setTimeout(() => overlay.classList.add('hidden'), 2500);
+    }
+
+    // LIVE ROOM LOGIC
+    function openLiveRoom(num, host, img, viewers) {
+      currentLiveHostData = { name: host, avatar: img, followers: (viewers || 140) * 8 };
+      document.getElementById('liveStreamBg').src = img;
+      document.getElementById('liveHostAvatar').src = img;
+      document.getElementById('liveHostName').innerHTML = host + ' <span class="text-[9px] text-blue-400">✓</span>';
+      document.getElementById('liveRoomTag').innerText = (num === 99) ? 'Your Live Broadcast 🎙️' : ('Night Classes #' + num);
+      document.getElementById('liveViewerCount').innerText = viewers;
+
+      if (num === 99) {
+        startUserWebcam();
+      } else {
+        stopUserWebcam();
+      }
+
+      // Render top 8 robot audience members with photos
+      renderRobotAudienceBar();
+
+      // Initialize comments with real robot photos
+      const list = document.getElementById('liveCommentsList');
+      if (list) {
+        list.innerHTML = `
+          <div class="flex items-start gap-2 bg-black/60 backdrop-blur-md p-2 rounded-2xl border border-white/10 text-xs shadow animate-in fade-in">
+            <img src="${ROBOT_AUDIENCE_MEMBERS[0].avatar}" onclick="openUserProfileView('${ROBOT_AUDIENCE_MEMBERS[0].name}', '${ROBOT_AUDIENCE_MEMBERS[0].avatar}', 1420, '${ROBOT_AUDIENCE_MEMBERS[0].name} is a VIP audience member on Night Classes!')" class="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-amber-400 cursor-pointer hover:scale-110 transition-transform">
+            <div class="flex-1 min-w-0">
+              <p onclick="openUserProfileView('${ROBOT_AUDIENCE_MEMBERS[0].name}', '${ROBOT_AUDIENCE_MEMBERS[0].avatar}', 1420, '${ROBOT_AUDIENCE_MEMBERS[0].name} is a VIP audience member on Night Classes!')" class="font-bold text-amber-300 text-[11px] leading-none flex items-center gap-1 cursor-pointer hover:underline">
+                <span>Liam Carter</span>
+                <span class="text-[8px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">VIP</span>
+              </p>
+              <p class="text-slate-100 text-[11px] mt-0.5 leading-snug">Welcome to the live session! Great music 🎵</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2 bg-black/60 backdrop-blur-md p-2 rounded-2xl border border-white/10 text-xs shadow animate-in fade-in">
+            <img src="${ROBOT_AUDIENCE_MEMBERS[1].avatar}" onclick="openUserProfileView('${ROBOT_AUDIENCE_MEMBERS[1].name}', '${ROBOT_AUDIENCE_MEMBERS[1].avatar}', 1420, '${ROBOT_AUDIENCE_MEMBERS[1].name} is a VIP audience member on Night Classes!')" class="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-amber-400 cursor-pointer hover:scale-110 transition-transform">
+            <div class="flex-1 min-w-0">
+              <p onclick="openUserProfileView('${ROBOT_AUDIENCE_MEMBERS[1].name}', '${ROBOT_AUDIENCE_MEMBERS[1].avatar}', 1420, '${ROBOT_AUDIENCE_MEMBERS[1].name} is a VIP audience member on Night Classes!')" class="font-bold text-amber-300 text-[11px] leading-none flex items-center gap-1 cursor-pointer hover:underline">
+                <span>Noah Davis</span>
+                <span class="text-[8px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">TOP</span>
+              </p>
+              <p class="text-slate-100 text-[11px] mt-0.5 leading-snug">Awesome vibe tonight! Enjoying the stream ❤️</p>
+            </div>
+          </div>
+        `;
+      }
+
+      // Play 13 Catbox songs non-stop
+      currentLiveSongIdx = (num - 1) % PLAYLIST.length;
+      playLiveSong(currentLiveSongIdx);
+
+      // Start 24/7 Robotic Audience comments and gifts
+      startRoboticChatter(num);
+
+      document.getElementById('modalLiveRoom').classList.remove('hidden');
+      document.getElementById('modalLiveRoom').classList.add('flex');
+    }
+
+    function playLiveSong(idx) {
+      if (!PLAYLIST || PLAYLIST.length === 0) return;
+      currentLiveSongIdx = (idx + PLAYLIST.length) % PLAYLIST.length;
+      const song = PLAYLIST[currentLiveSongIdx];
+      const songTitleEl = document.getElementById('liveSongTitle');
+      const songArtistEl = document.getElementById('liveSongArtist');
+      const tapBannerTitle = document.getElementById('liveTapBannerTitle');
+      if (songTitleEl) songTitleEl.innerText = song.title;
+      if (songArtistEl) songArtistEl.innerText = (song.artist || 'Bahadur Media') + ' · (' + (currentLiveSongIdx + 1) + '/' + PLAYLIST.length + ')';
+      if (tapBannerTitle) tapBannerTitle.innerText = song.title;
+
+      liveMusicAudio = document.getElementById('liveMusicAudioPlayer');
+      if (!liveMusicAudio) {
+        liveMusicAudio = new Audio();
+      }
+
+      liveMusicAudio.onplay = function() {
+        const btn = document.getElementById('btnLiveMusicPlay');
+        if (btn) btn.innerText = '⏸ Pause';
+        const banner = document.getElementById('liveAudioTapBanner');
+        if (banner) banner.classList.add('hidden');
+      };
+      liveMusicAudio.onpause = function() {
+        const btn = document.getElementById('btnLiveMusicPlay');
+        if (btn) btn.innerText = '▶ Play';
+        const banner = document.getElementById('liveAudioTapBanner');
+        if (banner) banner.classList.remove('hidden');
+      };
+      liveMusicAudio.onerror = function() {
+        console.warn('Live audio track notice, advancing to next...');
+        playLiveSong(currentLiveSongIdx + 1);
+      };
+      liveMusicAudio.onended = function() {
+        playLiveSong(currentLiveSongIdx + 1);
+      };
+
+      if (liveMusicAudio.src && (liveMusicAudio.src === song.url || liveMusicAudio.src.endsWith(song.url.split('/').pop())) && !liveMusicAudio.paused) {
+        const btn = document.getElementById('btnLiveMusicPlay');
+        if (btn) btn.innerText = '⏸ Pause';
+        const banner = document.getElementById('liveAudioTapBanner');
+        if (banner) banner.classList.add('hidden');
+        return;
+      }
+
+      liveMusicAudio.volume = 1.0;
+      liveMusicAudio.muted = false;
+      liveMusicAudio.src = song.url;
+      const p = liveMusicAudio.play();
+      if (p !== undefined) {
+        p.then(function() {
+          const btn = document.getElementById('btnLiveMusicPlay');
+          if (btn) btn.innerText = '⏸ Pause';
+          const banner = document.getElementById('liveAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function(err) {
+          console.warn('Live autoplay waiting for tap gesture:', err);
+          const btn = document.getElementById('btnLiveMusicPlay');
+          if (btn) btn.innerText = '▶ Play';
+          const banner = document.getElementById('liveAudioTapBanner');
+          if (banner) banner.classList.remove('hidden');
+        });
+      }
+    }
+
+    function toggleLiveMusic() {
+      if (!liveMusicAudio) {
+        liveMusicAudio = document.getElementById('liveMusicAudioPlayer') || new Audio();
+      }
+      if (liveMusicAudio.paused) {
+        if (!liveMusicAudio.src) {
+          liveMusicAudio.src = PLAYLIST[currentLiveSongIdx].url;
+          liveMusicAudio.load();
+        }
+        liveMusicAudio.play().then(function() {
+          const btn = document.getElementById('btnLiveMusicPlay');
+          if (btn) btn.innerText = '⏸ Pause';
+          const banner = document.getElementById('liveAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function(e) {
+          console.warn('Play failed:', e);
+        });
+      } else {
+        liveMusicAudio.pause();
+        const btn = document.getElementById('btnLiveMusicPlay');
+        if (btn) btn.innerText = '▶ Play';
+        const banner = document.getElementById('liveAudioTapBanner');
+        if (banner) banner.classList.remove('hidden');
+      }
+    }
+
+    function nextLiveSong() {
+      playLiveSong(currentLiveSongIdx + 1);
+    }
+
+    function loadPhoneSongForLive(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        if (!liveMusicAudio) liveMusicAudio = new Audio();
+        liveMusicAudio.src = objectUrl;
+        liveMusicAudio.play().catch(err => console.warn(err));
+        const titleEl = document.getElementById('liveSongTitle');
+        const artistEl = document.getElementById('liveSongArtist');
+        if (titleEl) titleEl.innerText = file.name.replace(/.[^/.]+$/, '');
+        if (artistEl) artistEl.innerText = 'Phone Audio Track (Bahadur Media)';
+        const btn = document.getElementById('btnLiveMusicPlay');
+        if (btn) btn.innerText = '⏸ Pause';
+        alert('Playing song directly from phone: ' + file.name);
+      }
+    }
+
+    function startRoboticChatter(num) {
+      if (liveRobotInterval) clearInterval(liveRobotInterval);
+      const isUserStream = (num === 99);
+      const robotTexts = isUserStream ? [
+        'Welcome host! Looking fantastic tonight! 🔥',
+        'Great voice! We can hear you loud and clear 🎙️✨',
+        'Loving this live stream! Sent you a sports car 🏎️',
+        'Awesome energy host! Followed your profile ❤️',
+        'Hello host! Loving the chill stream vibe! 😍',
+        'Crown for our superstar host! 👑',
+        'Best live stream on Night Classes! 🌹',
+        'Keep talking host, love your sound! 💖'
+      ] : [
+        'Awesome music and amazing vibes tonight! ❤️',
+        'Loving this stream! Sent a sports car 🏎️',
+        'Night Classes is the best place to chill 🔥',
+        'Great host! Looking fantastic as always 🌹',
+        'Bahadur Media songs are rocking the house! 🎶',
+        'Sent a royal crown for the superstar host! 👑'
+      ];
+
+      const giftsCatalog = [
+        { name: 'Red Rose', icon: '🌹', price: 10 },
+        { name: 'Sports Car', icon: '🏎️', price: 50 },
+        { name: 'Royal Crown', icon: '👑', price: 100 },
+        { name: 'Diamond Ring', icon: '💍', price: 80 }
+      ];
+
+      liveRobotInterval = setInterval(() => {
+        const rMember = ROBOT_AUDIENCE_MEMBERS[Math.floor(Math.random() * ROBOT_AUDIENCE_MEMBERS.length)];
+        const rText = robotTexts[Math.floor(Math.random() * robotTexts.length)];
+        
+        // Animate robot audience avatar
+        const audIcon = document.getElementById('aud_icon_' + rMember.id);
+        if (audIcon) {
+          audIcon.classList.add('scale-125');
+          setTimeout(() => audIcon && audIcon.classList.remove('scale-125'), 1800);
+        }
+
+        const list = document.getElementById('liveCommentsList');
+        if (list) {
+          const div = document.createElement('div');
+          div.className = "flex items-start gap-2 bg-black/60 backdrop-blur-md p-2 rounded-2xl border border-white/10 text-xs shadow animate-in fade-in";
+          div.innerHTML = `
+            <img src="${rMember.avatar}" onclick="openUserProfileView('${rMember.name}', '${rMember.avatar}', 1420, '${rMember.name} is a VIP audience member on Night Classes!')" class="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-amber-400 cursor-pointer hover:scale-110 transition-transform" alt="${rMember.name}">
+            <div class="flex-1 min-w-0">
+              <p onclick="openUserProfileView('${rMember.name}', '${rMember.avatar}', 1420, '${rMember.name} is a VIP audience member on Night Classes!')" class="font-bold text-amber-300 text-[11px] leading-none flex items-center gap-1 cursor-pointer hover:underline">
+                <span>${rMember.name}</span>
+                <span class="text-[8px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">${rMember.tag}</span>
+              </p>
+              <p class="text-slate-100 text-[11px] mt-0.5 leading-snug">${rText}</p>
+            </div>
+          `;
+          list.appendChild(div);
+          list.scrollTop = list.scrollHeight;
+        }
+
+        // Trigger gift animation popup
+        if (Math.random() > 0.45) {
+          const g = giftsCatalog[Math.floor(Math.random() * giftsCatalog.length)];
+          triggerGiftAnim(g.icon, g.name, rMember.name);
+        }
+
+        sendLiveHeart();
+      }, 3000);
+    }
+
+    function closeLiveRoom() {
+      stopUserWebcam();
+      if (liveMusicAudio) liveMusicAudio.pause();
+      if (liveRobotInterval) {
+        clearInterval(liveRobotInterval);
+        liveRobotInterval = null;
+      }
+      document.getElementById('modalLiveRoom').classList.add('hidden');
+      document.getElementById('modalLiveRoom').classList.remove('flex');
+    }
+    function toggleFollowHost() {
+      const btn = document.getElementById('btnFollowHost');
+      btn.innerText = (btn.innerText === '+ Follow') ? '✓ Following' : '+ Follow';
+    }
+    function sendLiveComment() {
+      const input = document.getElementById('liveChatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const list = document.getElementById('liveCommentsList');
+      const div = document.createElement('div');
+      div.className = "flex items-start gap-2 bg-rose-950/70 backdrop-blur-md p-2 rounded-2xl border border-rose-500/30 text-xs shadow animate-in fade-in";
+      div.innerHTML = `
+        <img src="${userAvatarUrl || PORTRAITS[4]}" class="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-rose-400" alt="You">
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-rose-300 text-[11px] leading-none">You (Host)</p>
+          <p class="text-white text-[11px] mt-0.5 leading-snug">${val}</p>
+        </div>
+      `;
+      list.appendChild(div);
+      list.scrollTop = list.scrollHeight;
+      input.value = '';
+    }
+    function sendLiveHeart() {
+      const c = document.getElementById('heartsContainer');
+      const heart = document.createElement('div');
+      heart.className = "heart-float text-3xl";
+      heart.innerText = ['❤️','💖','✨','🔥','🥰'][Math.floor(Math.random()*5)];
+      heart.style.right = (15 + Math.random() * 50) + 'px';
+      heart.style.bottom = (60 + Math.random() * 20) + 'px';
+      c.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+      const vc = document.getElementById('liveViewerCount');
+      vc.innerText = parseInt(vc.innerText) + 1;
+    }
+
+    // PARTY ROOM LOGIC
+    function handlePartyClick(num, isLocked, img) {
+      if (isLocked) {
+        const pass = prompt('This party room is passcode locked! Enter PIN (Default: 1234):');
+        if (pass === '1234') {
+          openPartyRoom(num, img);
+        } else if (pass !== null) {
+          alert('Incorrect passcode! PIN is 1234.');
+        }
+      } else {
+        openPartyRoom(num, img);
+      }
+    }
+    function openPartyRoom(num, img) {
+      currentPartyHostData = { name: 'Party Host #' + num, avatar: img, followers: 1250 + num * 25 };
+      document.getElementById('partyModalTitle').innerText = '🥂 Party Lounge #' + num;
+      document.getElementById('partyHostImg').src = img;
+      const hostLbl = document.getElementById('partyHostNameLabel');
+      if (hostLbl) hostLbl.innerText = 'Host #' + num;
+      document.getElementById('modalPartyRoom').classList.remove('hidden');
+      document.getElementById('modalPartyRoom').classList.add('flex');
+      playPartySong(num - 1);
+    }
+    function closePartyRoom() {
+      if (partyMusicAudio) partyMusicAudio.pause();
+      document.getElementById('modalPartyRoom').classList.add('hidden');
+      document.getElementById('modalPartyRoom').classList.remove('flex');
+    }
+
+    function playPartySong(idx) {
+      if (!PLAYLIST || PLAYLIST.length === 0) return;
+      currentPartySongIdx = (idx + PLAYLIST.length) % PLAYLIST.length;
+      const song = PLAYLIST[currentPartySongIdx];
+      const tEl = document.getElementById('partySongTitle');
+      const aEl = document.getElementById('partySongArtist');
+      const tapBannerTitle = document.getElementById('partyTapBannerTitle');
+      if (tEl) tEl.innerText = song.title;
+      if (aEl) aEl.innerText = (song.artist || 'Bahadur Media') + ' · (' + (currentPartySongIdx + 1) + '/' + PLAYLIST.length + ')';
+      if (tapBannerTitle) tapBannerTitle.innerText = song.title;
+
+      partyMusicAudio = document.getElementById('partyMusicAudioPlayer');
+      if (!partyMusicAudio) {
+        partyMusicAudio = new Audio();
+      }
+
+      partyMusicAudio.onplay = function() {
+        isPartyMusicPlaying = true;
+        const btn = document.getElementById('btnPartyMusic');
+        if (btn) btn.innerText = 'Pause ⏸';
+        const banner = document.getElementById('partyAudioTapBanner');
+        if (banner) banner.classList.add('hidden');
+      };
+      partyMusicAudio.onpause = function() {
+        isPartyMusicPlaying = false;
+        const btn = document.getElementById('btnPartyMusic');
+        if (btn) btn.innerText = 'Play ▶';
+        const banner = document.getElementById('partyAudioTapBanner');
+        if (banner) banner.classList.remove('hidden');
+      };
+      partyMusicAudio.onerror = function() {
+        console.warn('Party audio track notice, advancing to next...');
+        playPartySong(currentPartySongIdx + 1);
+      };
+      partyMusicAudio.onended = function() {
+        playPartySong(currentPartySongIdx + 1);
+      };
+
+      if (partyMusicAudio.src && (partyMusicAudio.src === song.url || partyMusicAudio.src.endsWith(song.url.split('/').pop())) && !partyMusicAudio.paused) {
+        isPartyMusicPlaying = true;
+        const btn = document.getElementById('btnPartyMusic');
+        if (btn) btn.innerText = 'Pause ⏸';
+        const banner = document.getElementById('partyAudioTapBanner');
+        if (banner) banner.classList.add('hidden');
+        return;
+      }
+
+      partyMusicAudio.volume = 1.0;
+      partyMusicAudio.muted = false;
+      partyMusicAudio.src = song.url;
+      const p = partyMusicAudio.play();
+      if (p !== undefined) {
+        p.then(function() {
+          isPartyMusicPlaying = true;
+          const btn = document.getElementById('btnPartyMusic');
+          if (btn) btn.innerText = 'Pause ⏸';
+          const banner = document.getElementById('partyAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function(err) {
+          console.warn('Party autoplay waiting for tap:', err);
+          isPartyMusicPlaying = false;
+          const btn = document.getElementById('btnPartyMusic');
+          if (btn) btn.innerText = 'Play ▶';
+          const banner = document.getElementById('partyAudioTapBanner');
+          if (banner) banner.classList.remove('hidden');
+        });
+      }
+    }
+
+    // Touch/click listener to unlock audio if device deferred autoplay
+    function attemptUnlockAudio() {
+      const liveAudio = document.getElementById('liveMusicAudioPlayer') || liveMusicAudio;
+      const partyAudio = document.getElementById('partyMusicAudioPlayer') || partyMusicAudio;
+      const liveModal = document.getElementById('modalLiveRoom');
+      const partyModal = document.getElementById('modalPartyRoom');
+
+      if (liveAudio && liveAudio.paused && liveModal && !liveModal.classList.contains('hidden')) {
+        liveAudio.play().then(function() {
+          const btn = document.getElementById('btnLiveMusicPlay');
+          if (btn) btn.innerText = '⏸ Pause';
+          const banner = document.getElementById('liveAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function() {});
+      }
+      if (partyAudio && partyAudio.paused && partyModal && !partyModal.classList.contains('hidden')) {
+        partyAudio.play().then(function() {
+          isPartyMusicPlaying = true;
+          const btn = document.getElementById('btnPartyMusic');
+          if (btn) btn.innerText = 'Pause ⏸';
+          const banner = document.getElementById('partyAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function() {});
+      }
+    }
+    window.addEventListener('click', attemptUnlockAudio, { passive: true });
+    window.addEventListener('touchstart', attemptUnlockAudio, { passive: true });
+
+    function togglePartyMusic() {
+      if (!partyMusicAudio) {
+        partyMusicAudio = document.getElementById('partyMusicAudioPlayer') || new Audio();
+      }
+      if (partyMusicAudio.paused) {
+        if (!partyMusicAudio.src) {
+          partyMusicAudio.src = PLAYLIST[currentPartySongIdx].url;
+          partyMusicAudio.load();
+        }
+        partyMusicAudio.play().then(function() {
+          isPartyMusicPlaying = true;
+          const btn = document.getElementById('btnPartyMusic');
+          if (btn) btn.innerText = 'Pause ⏸';
+          const banner = document.getElementById('partyAudioTapBanner');
+          if (banner) banner.classList.add('hidden');
+        }).catch(function(e) {
+          console.warn('Party play failed:', e);
+        });
+      } else {
+        partyMusicAudio.pause();
+        isPartyMusicPlaying = false;
+        const btn = document.getElementById('btnPartyMusic');
+        if (btn) btn.innerText = 'Play ▶';
+        const banner = document.getElementById('partyAudioTapBanner');
+        if (banner) banner.classList.remove('hidden');
+      }
+    }
+
+    function nextPartySong() {
+      playPartySong(currentPartySongIdx + 1);
+    }
+
+    function loadPhoneSongForParty(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        if (!partyMusicAudio) partyMusicAudio = new Audio();
+        partyMusicAudio.src = objectUrl;
+        partyMusicAudio.play().catch(err => console.warn(err));
+        const titleEl = document.getElementById('partySongTitle');
+        const artistEl = document.getElementById('partySongArtist');
+        if (titleEl) titleEl.innerText = file.name.replace(/.[^/.]+$/, '');
+        if (artistEl) artistEl.innerText = 'Phone Audio Track (Bahadur Media)';
+        const btn = document.getElementById('btnPartyMusic');
+        if (btn) btn.innerText = 'Pause ⏸';
+        isPartyMusicPlaying = true;
+        alert('Playing party track from phone: ' + file.name);
+      }
+    }
+
+    function toggleTakeSeat() {
+      isGuestSeated = !isGuestSeated;
+      const avatar = document.getElementById('guestSeatAvatar');
+      const name = document.getElementById('guestSeatName');
+      const btn = document.getElementById('btnTakeSeat');
+      if (isGuestSeated) {
+        avatar.innerHTML = '<img src="' + PORTRAITS[4] + '" class="w-full h-full object-cover rounded-full">';
+        name.innerText = 'Alex Vance (You)';
+        btn.innerText = 'Leave Seat 🚪';
+      } else {
+        avatar.innerHTML = '👤';
+        name.innerText = 'Empty Seat';
+        btn.innerText = 'Take Seat 💺';
+      }
+    }
+    function sendPartyChatMessage() {
+      const input = document.getElementById('partyChatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('partyChatBox');
+      const p = document.createElement('p');
+      p.className = "text-slate-200";
+      p.innerHTML = '<span class="text-amber-400 font-bold">You:</span> ' + val;
+      box.appendChild(p);
+      box.scrollTop = box.scrollHeight;
+      input.value = '';
+    }
+
+    // GIFTS LOGIC
+    function openGiftModal() {
+      document.getElementById('modalGiftCatalog').classList.remove('hidden');
+      document.getElementById('modalGiftCatalog').classList.add('flex');
+    }
+    function closeGiftModal() {
+      document.getElementById('modalGiftCatalog').classList.add('hidden');
+      document.getElementById('modalGiftCatalog').classList.remove('flex');
+    }
+    function giveGift(name, price, icon) {
+      if (coins < price) {
+        alert('Not enough coins! Please recharge coins to send ' + name);
+        closeGiftModal();
+        openRechargeModal();
+        return;
+      }
+      const hostEarnedCoins = Math.floor(price * 0.50);
+      const platformFeeCoins = price - hostEarnedCoins;
+      const hostDollar = (hostEarnedCoins * 0.005).toFixed(2); // 50 poisha per coin
+
+      coins -= price;
+      syncCoins();
+      closeGiftModal();
+      alert('🎁 Sent ' + icon + ' ' + name + '! 50% (' + hostEarnedCoins + ' coins / $' + hostDollar + ' USD) transferred to host account, 50% platform fee.');
+      sendLiveHeart();
+    }
+
+    // REELS LOGIC
+    function updateReel() {
+      const r = REELS_DATA[reelIndex];
+      document.getElementById('reelIframe').src = 'https://www.youtube-nocookie.com/embed/' + r.id + '?autoplay=1&mute=0&loop=1&playlist=' + r.id + '&controls=0&modestbranding=1';
+      document.getElementById('reelUploader').innerHTML = r.uploader + ' <span class="text-[9px] text-blue-400">✓</span>';
+      document.getElementById('reelTitle').innerText = r.title;
+      document.getElementById('reelLikesCount').innerText = r.likes;
+    }
+    function nextReel() { reelIndex = (reelIndex + 1) % REELS_DATA.length; updateReel(); }
+    function prevReel() { reelIndex = (reelIndex - 1 + REELS_DATA.length) % REELS_DATA.length; updateReel(); }
+    function toggleReelLike() {
+      REELS_DATA[reelIndex].likes += 1;
+      document.getElementById('reelLikesCount').innerText = REELS_DATA[reelIndex].likes;
+      alert('❤️ Liked reel!');
+    }
+    function openReelComment() {
+      const c = prompt('Write a comment for this reel:');
+      if (c) alert('Comment posted successfully!');
+    }
+    function sendReelGift() {
+      if (coins < 10) { alert('Not enough coins! Please recharge.'); return; }
+      coins -= 10;
+      syncCoins();
+      alert('🎁 Sent Red Rose to creator! 10 coins deducted.');
+    }
+    function shareReel() {
+      alert('Reel link copied to clipboard!');
+    }
+    function openReelUploadModal() {
+      document.getElementById('modalUploadReel').classList.remove('hidden');
+      document.getElementById('modalUploadReel').classList.add('flex');
+    }
+    function closeReelUploadModal() {
+      document.getElementById('modalUploadReel').classList.add('hidden');
+      document.getElementById('modalUploadReel').classList.remove('flex');
+    }
+    function submitUploadReel() {
+      const title = document.getElementById('upReelTitle').value.trim();
+      const url = document.getElementById('upReelUrl').value.trim();
+      if (!title || !url) { alert('Please enter both title and YouTube URL!'); return; }
+      let vidId = 'kJQP7kiw5Fk';
+      if (url.includes('shorts/')) vidId = url.split('shorts/')[1].split('?')[0];
+      else if (url.includes('v=')) vidId = url.split('v=')[1].split('&')[0];
+      else if (url.includes('youtu.be/')) vidId = url.split('youtu.be/')[1].split('?')[0];
+      REELS_DATA.unshift({ id: vidId, title: title, uploader: 'Alex Vance', likes: 1 });
+      reelIndex = 0;
+      updateReel();
+      closeReelUploadModal();
+      alert('Reel published successfully!');
+    }
+
+    // GO LIVE LOGIC
+    function openGoLive() {
+      document.getElementById('modalGoLive').classList.remove('hidden');
+      document.getElementById('modalGoLive').classList.add('flex');
+    }
+    function closeGoLiveModal() {
+      document.getElementById('modalGoLive').classList.add('hidden');
+      document.getElementById('modalGoLive').classList.remove('flex');
+    }
+    function startMyLiveStream() {
+      const title = document.getElementById('goLiveTitle').value.trim() || 'Night Classes Live Stream 🎙️';
+      closeGoLiveModal();
+
+      const hostLabel = userEmail ? userEmail.split('@')[0] : 'You (Live Host)';
+      const hostAvatar = userAvatarUrl || PORTRAITS[4];
+
+      // Add user's broadcast room at the top of liveGrid
+      const liveGrid = document.getElementById('liveGrid');
+      if (liveGrid) {
+        const div = document.createElement('div');
+        div.className = "rounded-2xl overflow-hidden bg-[#0F0F24] border-2 border-rose-500 hover:border-amber-400 cursor-pointer transition-all duration-300 hover:shadow-2xl shadow-rose-900/50 flex flex-col group animate-in zoom-in-95";
+        div.innerHTML = `
+          <div class="relative aspect-[4/3] bg-black overflow-hidden">
+            <img src="${hostAvatar}" alt="${hostLabel}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F24] via-transparent to-black/40"></div>
+            <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-rose-600 text-white text-[9px] font-black animate-pulse shadow">
+              ● BROADCASTING
+            </span>
+            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-emerald-400 text-[9px] font-bold">
+              YOU
+            </span>
+          </div>
+          <div class="p-2.5 space-y-1">
+            <p class="text-xs font-bold text-white truncate flex items-center gap-1">
+              <span>${hostLabel}</span>
+              <span class="text-[9px] text-blue-400">✓</span>
+            </p>
+            <p class="text-[10px] text-rose-300 truncate">${title}</p>
+          </div>
+        `;
+        div.onclick = () => {
+          openLiveRoom(99, hostLabel, hostAvatar, 1);
+        };
+        liveGrid.insertBefore(div, liveGrid.firstChild);
+      }
+
+      openLiveRoom(99, hostLabel, hostAvatar, 1);
+      document.getElementById('liveRoomTag').innerText = title;
+    }
+
+    // CHAT & FOLLOW
+    function startChatWith(name) {
+      nav('messages');
+      const box = document.getElementById('chatMessagesBox');
+      const div = document.createElement('div');
+      div.className = "flex items-start gap-2 animate-in fade-in";
+      div.innerHTML = `
+        <div class="bg-rose-950/40 border border-rose-500/30 p-2.5 rounded-2xl max-w-[80%]">
+          <p class="font-bold text-rose-300 text-[10px]">${name}</p>
+          <p class="text-slate-200 mt-0.5">Hi Alex! Glad to connect with you on Night Classes!</p>
+        </div>
+      `;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+    function toggleFollow(btn) {
+      btn.innerText = (btn.innerText === '+ Follow') ? '✓ Following' : '+ Follow';
+    }
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('chatMessagesBox');
+      const div = document.createElement('div');
+      div.className = "flex items-start justify-end gap-2";
+      div.innerHTML = `
+        <div class="bg-rose-600 p-2.5 rounded-2xl rounded-tr-none max-w-[75%] text-white">
+          <p class="text-[10px] opacity-80">You</p>
+          <p class="mt-0.5">${val}</p>
+        </div>
+      `;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      input.value = '';
+    }
+
+    // VIP FRAME RENEWAL (200 Coins for 1 month)
+    function renewVipFrame() {
+      if (coins < 200) {
+        alert('Insufficient coins! You have ' + coins + ' coins. 200 coins are required to renew VIP Royal Gold Frame and Verified Badge.');
+        openRechargeModal();
+        return;
+      }
+      coins -= 200;
+      syncCoins();
+      alert('🎉 VIP Frame and Verified Badge successfully renewed for another 30 days! 200 coins deducted.');
+    }
+
+    // RECHARGE LOGIC
+    let selectedCoinsToAdd = 500;
+    function openRechargeModal() {
+      document.getElementById('modalRecharge').classList.remove('hidden');
+      document.getElementById('modalRecharge').classList.add('flex');
+    }
+    function closeRechargeModal() {
+      document.getElementById('modalRecharge').classList.add('hidden');
+      document.getElementById('modalRecharge').classList.remove('flex');
+    }
+    function selectPackage(c, p) {
+      selectedCoinsToAdd = c;
+      alert('Selected ' + c + ' coins package.');
+    }
+    function submitRecharge() {
+      coins += selectedCoinsToAdd;
+      syncCoins();
+      closeRechargeModal();
+      alert('Recharge successful! Added ' + selectedCoinsToAdd + ' coins to your balance.');
+    }
+
+    // ADMIN VIEW LOGIC (Triggered by bottom small lock button 🔒)
+    function openAdminLoginModal() {
+      document.getElementById('modalAdminLogin').classList.remove('hidden');
+      document.getElementById('modalAdminLogin').classList.add('flex');
+    }
+    function closeAdminLoginModal() {
+      document.getElementById('modalAdminLogin').classList.add('hidden');
+      document.getElementById('modalAdminLogin').classList.remove('flex');
+    }
+    function submitAdminLogin() {
+      const email = document.getElementById('adminEmailInput').value.trim();
+      const pass = document.getElementById('adminPassInput').value;
+      const err = document.getElementById('adminLoginErr');
+      if (email.toLowerCase() === 'anjalibahadur3@gmail.com' && pass === 'bahadur@2025#') {
+        err.classList.add('hidden');
+        closeAdminLoginModal();
+        nav('admin');
+      } else {
+        err.innerText = 'Invalid credentials! Access restricted to Administrator.';
+        err.classList.remove('hidden');
+      }
+    }
+    function openAdminView() {
+      openAdminLoginModal();
+    }
+    function closeAdminView() {
+      nav('live');
+    }
+    function adminAddCoins() {
+      const amt = parseInt(document.getElementById('adminCoinInput').value) || 500;
+      coins += amt;
+      syncCoins();
+      alert('Admin added ' + amt + ' coins to account! Current balance: ' + coins);
+    }
+    function copyThisCode() {
+      const fullHtml = document.documentElement.outerHTML;
+      navigator.clipboard.writeText(fullHtml).then(() => {
+        const btn = document.getElementById('btnCopySingleCode');
+        btn.innerText = '✓ Code Copied Successfully!';
+        setTimeout(() => btn.innerText = '📋 Copy 100% Complete Code', 3000);
+      }).catch(() => {
+        alert('Code copied!');
+      });
+    }
+
+    function adminSaveCustomAudio() {
+      const inp = document.getElementById('adminCustomAudioInput');
+      const val = inp ? inp.value.trim() : '';
+      if (!val) {
+        alert('Please enter a valid direct MP3 audio URL.');
+        return;
+      }
+      const newTrack = {
+        title: 'Custom Audio Song #' + (PLAYLIST.length + 1),
+        artist: 'Bahadur Media · Custom Track',
+        url: val,
+        relativeUrl: val,
+        fallbackUrl: val
+      };
+      PLAYLIST.unshift(newTrack);
+      try {
+        localStorage.setItem('nc_custom_audio', JSON.stringify(newTrack));
+      } catch(e) {}
+      inp.value = '';
+      alert('🎉 Custom audio link saved successfully! It is now set as the top track for Live & Party rooms.');
+    }
+  </script>
+</body>
+</html>
